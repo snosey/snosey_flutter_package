@@ -3,8 +3,8 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:http/http.dart' as http;
-import 'package:snosey_flutter_package/api/ApiResponse.dart';
 import 'package:snosey_flutter_package/Enums.dart';
+import 'package:snosey_flutter_package/api/ApiResponse.dart';
 
 class ApiController {
   static late String baseUrl;
@@ -85,7 +85,7 @@ class ApiController {
       if (response.headers.containsKey("x-pagination")) {
         apiResponse.pagination.hasPagination = true;
         apiResponse.pagination
-            .init(jsonDecode(response.headers["x-pagination"]!));
+            .set(jsonDecode(response.headers["x-pagination"]!));
       } else {
         apiResponse.pagination.hasPagination = false;
       }

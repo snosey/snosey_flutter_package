@@ -27,7 +27,7 @@ class Pagination {
   bool hasPrevious = false;
   bool hasNext = false;
 
-  init(Map<String, dynamic> json) {
+  set(Map<String, dynamic> json) {
     hasNext = json['HasNext'] as bool;
     hasPrevious = json['HasPrevious'] as bool;
     totalCount = json['TotalCount'] as int;
