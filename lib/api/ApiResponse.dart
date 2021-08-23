@@ -26,6 +26,8 @@ class Pagination {
   int totalCount = 0;
   bool hasPrevious = false;
   bool hasNext = false;
+  String prevPage = "";
+  String nextPage = "";
 
   set(Map<String, dynamic> json) {
     hasNext = json['HasNext'] as bool;
@@ -34,5 +36,7 @@ class Pagination {
     pageSize = json['PageSize'] as int;
     totalPages = json['TotalPages'] as int;
     currentPage = json['CurrentPage'] as int;
+    prevPage = json['PrevoisPageLink'] as String;
+    nextPage = json['NextPageLink'] as String;
   }
 }

@@ -6,16 +6,7 @@ import 'package:snosey_flutter_package/res/MyLanguages.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 class SnoseyFlutter {
- static init(
-      {
-      required String baseUrl,
-      required String serverError,
-      Map<String, String> additionalStaticParams = const {}}) {
+ static init() {
     timeago.setLocaleMessages('ar', timeago.ArMessages());
-    ApiController.init(
-        baseUrl: baseUrl,
-        serverError: serverError,
-        additionalStaticParams:
-            additionalStaticParams); // like ( TOKEN & CULTURE )
-   }
+    }
 }
