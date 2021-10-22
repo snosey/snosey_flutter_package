@@ -1,6 +1,6 @@
 name: snosey_flutter_package
 description: Snosey Private Flutter Package.
-version: 0.2.0
+version: 0.8.3
 homepage: https://github.com/snosey/snosey_flutter_package
 
 environment:
@@ -12,21 +12,29 @@ dependencies:
     sdk: flutter
   flutter_localizations:
     sdk: flutter
-  http: ^0.13.3
+  http: ^0.13.4
+  mime: ^1.0.0
   json_annotation: any
   carousel_slider: ^4.0.0
   flutter_secure_storage: ^4.2.1
-  photo_view: ^0.12.0
+  shared_preferences: ^2.0.8
+  photo_view: ^0.13.0
   get: ^4.3.8
+  flutter_local_notifications: ^9.0.0
   shimmer: ^2.0.0
+  http_parser: ^4.0.0
   url_launcher: ^6.0.2
   fluttertoast: ^8.0.8
   timeago: ^3.1.0
+  firebase_messaging: ^10.0.8
+  dio: ^4.0.0
   intl: ^0.17.0
+  file_picker: ^4.1.4
+
 
 
 dev_dependencies:
-  build_runner: ^2.1.1
+  build_runner: ^2.1.4
   json_serializable: any
   flutter_test:
     sdk: flutter

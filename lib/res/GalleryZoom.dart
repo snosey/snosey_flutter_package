@@ -12,11 +12,11 @@ class GalleryZoom {
         context: context,
         isScrollControlled: true,
         builder: (_) {
-          return build();
+          return _build();
         });
   }
 
-  Widget build() {
+  Widget _build() {
     PageController pageController = PageController(initialPage: currentIndex);
     var _current = currentIndex.obs;
     return Scaffold(
@@ -65,27 +65,30 @@ class GalleryZoom {
                     alignment: Alignment.bottomCenter,
                     child: Padding(
                       padding: const EdgeInsets.all(10.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: imgList.map((url) {
-                          int index = imgList.indexOf(url);
-                          return Obx(
-                            () => Container(
-                              width: 15.0,
-                              height: 15.0,
-                              margin: EdgeInsets.symmetric(
-                                  vertical: 10.0, horizontal: 2.0),
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: _current.value == index
-                                    ? Theme.of(context).buttonColor
-                                    : Theme.of(context)
-                                        .buttonColor
-                                        .withOpacity(.3),
+                      child: SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: imgList.map((url) {
+                            int index = imgList.indexOf(url);
+                            return Obx(
+                              () => Container(
+                                width: 15.0,
+                                height: 15.0,
+                                margin: EdgeInsets.symmetric(
+                                    vertical: 10.0, horizontal: 2.0),
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: _current.value == index
+                                      ? Theme.of(context).buttonColor
+                                      : Theme.of(context)
+                                          .buttonColor
+                                          .withOpacity(.3),
+                                ),
                               ),
-                            ),
-                          );
-                        }).toList(),
+                            );
+                          }).toList(),
+                        ),
                       ),
                     ),
                   )

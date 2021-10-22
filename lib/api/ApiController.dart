@@ -1,54 +1,51 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:developer';
 import 'dart:io';
+import 'dart:typed_data';
 
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:http/http.dart' as http;
+import 'package:dio/adapter.dart';
+import 'package:dio/dio.dart';
+import 'package:file_picker/file_picker.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:flutter_secure_storage/flutter_secure_storage.dart'
+    as storageSecure;
+import 'package:http_parser/http_parser.dart';
 import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:snosey_flutter_package/Enums.dart';
 import 'package:snosey_flutter_package/api/ApiResponse.dart';
 
 class ApiController {
   static late String baseUrl;
-  static late String appSecret;
-  static late String apiKey;
-  static late String userAgent;
+  static String? appSecret;
+  static String? apiKey;
+  static String? userAgent;
   static late String serverErrorMessage;
-  static late String refreshTokenUrl;
+  static String? refreshTokenUrl;
+  static String? revokeTokenUrl;
   static Map<String, String> staticParams = {};
   static String _cookies = "";
+  final String apiUrl;
+  final RequestTypeEnum requestType;
+  static Map<String, String> staticHeaders = {};
+  static ByteData? _pemCer;
+  static ByteData? _keyCer;
+  static String? _secretCer;
   Map<RequestTypeEnum, String> requestTypeMap = {
     RequestTypeEnum.PUT: "PUT",
     RequestTypeEnum.POST: "POST",
     RequestTypeEnum.GET: "GET",
     RequestTypeEnum.DELETE: "DELETE"
   };
-  final String apiUrl;
-  final RequestTypeEnum requestType;
-  static Map<String, String> staticHeaders = {
-    'Content-Type': 'application/json; charset=UTF-8',
-  };
-  late http.Response response;
-  late http.MultipartRequest multiPartRequest;
 
   ApiController(this.apiUrl, this.requestType);
 
   static init({
     required String baseUrl,
     required String serverErrorMessage,
-    required String appSecret,
-    required UserAgentEnum userAgent,
-    required String apiKey,
-    required String refreshTokenUrl,
   }) {
     ApiController.baseUrl = baseUrl;
-    ApiController.refreshTokenUrl = refreshTokenUrl;
     ApiController.serverErrorMessage = serverErrorMessage;
-    _addCookies("Secret", appSecret);
-    _addCookies("Api-Key", apiKey);
-    staticHeaders["User-Agent"] =
-        userAgent.toString().replaceFirst("UserAgentEnum.", "");
   }
 
   static _addCookies(String key, String value) {
@@ -56,73 +53,125 @@ class ApiController {
   }
 
   Future<ApiResponse> sendRequest(
-      {Map<String, dynamic>? body,
-      Map<String, File>? files,
+      {Map<String, dynamic> body = const {},
+      Map<String, PlatformFile> files = const {},
       bool isMultiPart = false,
       Map<String, String> header = const {},
       Map<String, String> queryParameters = const {}}) async {
-    staticParams.addAll(queryParameters);
-    staticHeaders["Cookie"] = _cookies;
+    Map<String, String> finalQueryParams = {};
+    finalQueryParams.addAll(queryParameters);
+    finalQueryParams.addAll(staticParams);
+
+    if (_cookies.isNotEmpty) staticHeaders["Cookie"] = _cookies;
     staticHeaders.addAll(header);
-    var uri = Uri.https(baseUrl, apiUrl, staticParams);
-    log('request url: ${uri.toString()}');
-    log('request header: ${staticHeaders.toString()}');
+    var requestData;
     if (isMultiPart) {
-      log('request body: ${body.toString()}');
-      multiPartRequest =
-          http.MultipartRequest(requestTypeMap[requestType]!, uri);
-      multiPartRequest.headers.addAll(staticHeaders);
-      if (files != null && files.isNotEmpty) {
-        files.forEach((name, file) {
-          multiPartRequest.files.add(http.MultipartFile(
-              name, file.readAsBytes().asStream(), file.lengthSync(),
-              filename: name));
+      requestData = FormData();
+      if (files.isNotEmpty) {
+        requestData.files.addAll(files.map((fileKey, file) {
+          var fileName = file.name;
+          var contentType = MediaType("image", file.name.split(".")[1]);
+          return MapEntry(
+              fileKey,
+              MultipartFile.fromBytes(
+                file.bytes!,
+                filename: fileName,
+                contentType: contentType,
+              ));
+        }).entries);
+      }
+      if (body.isNotEmpty) {
+        body.forEach((key, value) {
+          requestData.fields.add(fillMultiPart(key, value, "")!);
         });
       }
-      if (body != null && body.isNotEmpty)
-        body.forEach((key, value) {
-          _fillMultiPart(key, value, "");
-        });
+    } else {
+      requestData = body;
+    }
+    var api = Dio(
+      BaseOptions(
+        baseUrl: baseUrl,
+        contentType: 'application/json; charset=UTF-8',
+        responseType: ResponseType.json,
+        headers: staticHeaders,
+        extra: {
+          "withCredentials": true,
+        },
+        method: requestType.toString().replaceAll("RequestTypeEnum.", ""),
+      ),
+    );
 
-      log('multipart body: ${multiPartRequest.fields.toString()}');
-      var streamResponse = await multiPartRequest.send();
-      response = await http.Response.fromStream(streamResponse);
-    } else if (requestType == RequestTypeEnum.GET) {
-      response = await http.get(uri, headers: staticHeaders);
-    } else if (requestType == RequestTypeEnum.POST) {
-      log('request body: ${body.toString()}');
-      response =
-          await http.post(uri, headers: staticHeaders, body: jsonEncode(body));
-    } else if (requestType == RequestTypeEnum.PUT) {
-      log('request body: ${body.toString()}');
-      response =
-          await http.put(uri, headers: staticHeaders, body: jsonEncode(body));
-    } else if (requestType == RequestTypeEnum.DELETE) {
-      response = await http.delete(uri, headers: staticHeaders);
+    if (_pemCer != null) {
+      if (!kIsWeb) {
+        (api.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate =
+            (client) {
+          SecurityContext serverContext = new SecurityContext()
+            ..useCertificateChainBytes(_pemCer!.buffer.asUint8List())
+            ..usePrivateKeyBytes(_keyCer!.buffer.asUint8List(),
+                password: _secretCer!);
+
+          HttpClient httpClient = HttpClient(
+            context: serverContext,
+          );
+
+          httpClient.badCertificateCallback =
+              (X509Certificate cert, String host, int port) => true;
+
+          return httpClient;
+        };
+      }
     }
 
-    log('response body: ${jsonDecode(response.body)}');
-
+    api.interceptors.add(
+      LogInterceptor(
+        responseBody: true,
+        error: true,
+        request: true,
+        requestBody: true,
+        requestHeader: true,
+        responseHeader: true,
+      ),
+    );
+    var response = await api
+        .request(
+          apiUrl,
+          data: requestData,
+          options: Options(
+            extra: {
+              "withCredentials": true,
+            },
+          ),
+          queryParameters: finalQueryParams,
+        )
+        .onError((error, stackTrace) => throw serverErrorMessage);
     if (response.statusCode == HttpStatus.ok) {
-      if (response.headers.containsKey("authorization")) {
+      var commaDecode = "\\002C";
+      if (response.headers.value("authorization") != null) {
         Auth._setBearerToken(
-            token: response.headers["authorization"]!,
-            expiration: response.headers["expires"]!);
-        Auth._setRefreshToken(response.headers["set-cookie"]!);
+          token: response.headers
+              .value("authorization")!
+              .replaceAll(commaDecode, ","),
+          expiration:
+              response.headers.value("expires")!.replaceAll(commaDecode, ","),
+        );
+        await Auth._setRefreshToken(response.headers
+            .value("Set-Refresh")!
+            .replaceAll(commaDecode, ","));
       }
 
       var apiResponse = ApiResponse();
-      apiResponse.setStatus(jsonDecode(response.headers["x-status"]!));
-      if (response.headers.containsKey("x-pagination")) {
+      apiResponse.setStatus(jsonDecode(
+          response.headers.value("x-status")!.replaceAll(commaDecode, ",")));
+      if (response.headers.value("x-pagination") != null) {
         apiResponse.pagination.hasPagination = true;
-        apiResponse.pagination
-            .set(jsonDecode(response.headers["x-pagination"]!));
+        apiResponse.pagination.set(jsonDecode(response.headers
+            .value("x-pagination")!
+            .replaceAll(commaDecode, ",")));
       } else {
         apiResponse.pagination.hasPagination = false;
       }
-      log('response status: ${response.headers["x-status"]}');
       if (apiResponse.success) {
-        apiResponse.objectResponse = jsonDecode(response.body);
+        apiResponse.objectResponse = response.data;
         return apiResponse;
       } else
         throw utf8.decode(base64.decode(apiResponse.errorMessage));
@@ -131,23 +180,45 @@ class ApiController {
     }
   }
 
-  _fillMultiPart(String key, dynamic value, String root) {
+  MapEntry<String, String>? fillMultiPart(
+      String key, dynamic value, String root) {
     if (value is Map) {
-      value.forEach((key2, value2) {
-        _fillMultiPart(key2, value2, key + ".");
-      });
+      for (var object in value.entries) {
+        return fillMultiPart(object.key, object.value, root+ key + ".");
+      }
     } else if (value is List) {
       for (int i = 0; i < value.length; i++)
-        _fillMultiPart("$key[$i]'", value[i], root);
+        return fillMultiPart("$key[$i]", value[i], root);
     } else {
-      multiPartRequest.fields[root + key] = value.toString();
+      return MapEntry("$root$key", value.toString());
     }
   }
 }
 
 class Auth {
-  static var expirationFormat = DateFormat("E, dd MMM yyy HH:mm:ss 'GMT'");
-  static Timer? reNewExpirationTimer;
+  static var _expirationFormat = DateFormat("E, dd MMM yyy HH:mm:ss 'GMT'");
+  static Timer? _reNewExpirationTimer;
+
+  static init({
+    required String appSecret,
+    required UserAgentEnum userAgent,
+    required String apiKey,
+    required String refreshTokenUrl,
+    required String revokeTokenUrl,
+    ByteData? pemCer,
+    ByteData? keyCer,
+    required String? secretCer,
+  }) {
+    ApiController.refreshTokenUrl = refreshTokenUrl;
+    ApiController.revokeTokenUrl = revokeTokenUrl;
+    ApiController.staticHeaders["Secret"] = appSecret;
+    ApiController.staticHeaders["Api-Key"] = apiKey;
+    ApiController.staticHeaders["User-Platform"] =
+        userAgent.toString().replaceFirst("UserAgentEnum.", "");
+    ApiController._pemCer = pemCer;
+    ApiController._keyCer = keyCer;
+    ApiController._secretCer = secretCer;
+  }
 
   static _setBearerToken({
     required String token,
@@ -155,45 +226,98 @@ class Auth {
   }) {
     ApiController.staticHeaders["Authorization"] = token;
     var expirationMin = DateTime.now()
-            .difference(expirationFormat.parse(expiration))
+            .difference(_expirationFormat.parse(expiration))
             .inMinutes -
         5;
     print("renew in $expirationMin min");
-    reNewExpirationTimer = Timer(Duration(minutes: expirationMin), () {
+    _reNewExpirationTimer = Timer(Duration(minutes: expirationMin), () {
       reNewToken();
     });
   }
 
   static Future<bool> reNewToken() async {
-    final storage = new FlutterSecureStorage();
-    String? expires = await storage.read(key: "expires");
+    String? expires;
+    String? token;
+    if (!kIsWeb) {
+      final storage = new storageSecure.FlutterSecureStorage();
+      expires = await storage.read(key: "Expires");
+      token = await storage.read(key: "RefreshToken");
+    } else {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      expires = prefs.getString("Expires");
+      token = prefs.getString("RefreshToken");
+    }
     if (expires != null &&
-        expirationFormat.parse(expires).isAfter(DateTime.now())) {
-      String? token = await storage.read(key: "refreshToken");
-      var response = await ApiController(
-              ApiController.refreshTokenUrl, RequestTypeEnum.POST)
-          .sendRequest(body: {"Token": token!});
-      return response.success;
+        _expirationFormat.parse(expires).isAfter(DateTime.now())) {
+      bool isAuth = false;
+
+      await ApiController(ApiController.refreshTokenUrl!, RequestTypeEnum.POST)
+          .sendRequest(body: {"Token": token!}).then((value) {
+        isAuth = true;
+      }).onError((error, stackTrace) {
+        isAuth = false;
+      });
+      return isAuth;
     } else {
       return false;
     }
   }
 
-  static clearToken() {
-    if (reNewExpirationTimer != null) reNewExpirationTimer!.cancel();
-    if (ApiController.staticHeaders.containsKey("Authorization"))
-      ApiController.staticHeaders.remove("Authorization");
-    final storage = new FlutterSecureStorage();
-    storage.deleteAll();
+  static Future<bool> clearToken() async {
+    String? token;
+    if (!kIsWeb) {
+      final storage = new storageSecure.FlutterSecureStorage();
+      token = await storage.read(key: "RefreshToken");
+    } else {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      token = prefs.getString("RefreshToken");
+    }
+
+    bool isCleared = false;
+
+    await ApiController(ApiController.revokeTokenUrl!, RequestTypeEnum.POST)
+        .sendRequest(body: {"Token": token!}).then((value) {
+      isCleared = true;
+      if (_reNewExpirationTimer != null) _reNewExpirationTimer!.cancel();
+      if (ApiController.staticHeaders.containsKey("Authorization"))
+        ApiController.staticHeaders.remove("Authorization");
+
+      if (!kIsWeb) {
+        final storage = new storageSecure.FlutterSecureStorage();
+        storage.deleteAll();
+      } else {
+        SharedPreferences.getInstance().then((value) => value.clear());
+      }
+    }).onError((error, stackTrace) {
+      isCleared = false;
+    });
+    return isCleared;
   }
 
-  static _setRefreshToken(String cookies) {
-    final storage = new FlutterSecureStorage();
-    cookies.split(";").forEach((element) {
+  static _setRefreshToken(String refreshToken) async {
+    final storage = new storageSecure.FlutterSecureStorage();
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    Map<String, dynamic> json = jsonDecode(refreshToken);
+    json.forEach((key, value) {
+      if (!kIsWeb)
+        storage.write(key: key, value: value);
+      else
+        prefs.setString(key, value);
+    });
+  }
+
+  static _setRefreshToken2(String cookies) async {
+    final storage = new storageSecure.FlutterSecureStorage();
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    cookies.split("; ").forEach((element) {
       var key = element.split("=").first;
       var value = element.split("=").last;
       if (key == "refreshToken" || key == "expires") {
-        storage.write(key: key, value: value);
+        if (!kIsWeb)
+          storage.write(key: key, value: value);
+        else {
+          prefs.setString(key, value);
+        }
       }
     });
   }

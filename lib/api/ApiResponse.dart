@@ -5,11 +5,19 @@ enum RequestState {
 
 class ApiResponse {
   late bool success;
-  RequestState requestState = RequestState.Fetch;
+  RequestState requestState;
   late String errorMessage;
   late String exceptionMessage;
   Pagination pagination = Pagination();
   dynamic objectResponse;
+
+  ApiResponse({
+    this.success = false,
+    this.requestState = RequestState.Fetch,
+    this.errorMessage = "",
+    this.exceptionMessage = "",
+    this.objectResponse,
+  });
 
   setStatus(Map<String, dynamic> json) {
     success = json['Success'] as bool;
@@ -26,8 +34,8 @@ class Pagination {
   int totalCount = 0;
   bool hasPrevious = false;
   bool hasNext = false;
-  String prevPage = "";
-  String nextPage = "";
+  String? prevPage = "";
+  String? nextPage = "";
 
   set(Map<String, dynamic> json) {
     hasNext = json['HasNext'] as bool;
@@ -36,7 +44,7 @@ class Pagination {
     pageSize = json['PageSize'] as int;
     totalPages = json['TotalPages'] as int;
     currentPage = json['CurrentPage'] as int;
-    prevPage = json['PrevoisPageLink'] as String;
-    nextPage = json['NextPageLink'] as String;
+    prevPage = json['PrevoisPageLink'] as String?;
+    nextPage = json['NextPageLink'] as String?;
   }
 }
