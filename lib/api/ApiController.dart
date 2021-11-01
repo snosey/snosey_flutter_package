@@ -224,7 +224,7 @@ class Auth {
     required String token,
     required String expiration,
   }) {
-    ApiController.staticHeaders["Authorization"] = token;
+    ApiController.staticHeaders["Authorization-Token"] = token;
     var expirationMin = DateTime.now()
             .difference(_expirationFormat.parse(expiration))
             .inMinutes -
@@ -279,8 +279,8 @@ class Auth {
         .sendRequest(body: {"Token": token!}).then((value) {
       isCleared = true;
       if (_reNewExpirationTimer != null) _reNewExpirationTimer!.cancel();
-      if (ApiController.staticHeaders.containsKey("Authorization"))
-        ApiController.staticHeaders.remove("Authorization");
+      if (ApiController.staticHeaders.containsKey("Authorization-Token"))
+        ApiController.staticHeaders.remove("Authorization-Token");
 
       if (!kIsWeb) {
         final storage = new storageSecure.FlutterSecureStorage();
