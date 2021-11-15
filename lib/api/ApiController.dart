@@ -20,6 +20,8 @@ class ApiController {
   static String? appSecret;
   static String? apiKey;
   static String? userAgent;
+  static String? authorization;
+  static String? authorizationExpired;
   static late String serverErrorMessage;
   static String? refreshTokenUrl;
   static String? revokeTokenUrl;
@@ -184,7 +186,7 @@ class ApiController {
       String key, dynamic value, String root) {
     if (value is Map) {
       for (var object in value.entries) {
-        return fillMultiPart(object.key, object.value, root+ key + ".");
+        return fillMultiPart(object.key, object.value, root + key + ".");
       }
     } else if (value is List) {
       for (int i = 0; i < value.length; i++)
@@ -224,6 +226,8 @@ class Auth {
     required String token,
     required String expiration,
   }) {
+    ApiController.authorization = token;
+    ApiController.authorizationExpired = expiration;
     ApiController.staticHeaders["Authorization-Token"] = token;
     var expirationMin = DateTime.now()
             .difference(_expirationFormat.parse(expiration))
