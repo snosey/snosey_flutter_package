@@ -54,12 +54,15 @@ class ApiController {
     _cookies += "$key=$value;";
   }
 
-  Future<ApiResponse> sendRequest(
-      {Map<String, dynamic> body = const {},
-      Map<String, PlatformFile> files = const {},
-      bool isMultiPart = false,
-      Map<String, String> header = const {},
-      Map<String, String> queryParameters = const {}}) async {
+  Future<ApiResponse> sendRequest({
+    Map<String, dynamic> body = const {},
+    List<Map<String, dynamic>>? listBody,
+    Map<String, PlatformFile> files = const {},
+    bool isMultiPart = false,
+    Map<String, String> header = const {},
+    Map<String, String> queryParameters = const {},
+    String? optionalUrl,
+  }) async {
     Map<String, String> finalQueryParams = {};
     finalQueryParams.addAll(queryParameters);
     finalQueryParams.addAll(staticParams);
@@ -82,17 +85,25 @@ class ApiController {
               ));
         }).entries);
       }
-      if (body.isNotEmpty) {
-        body.forEach((key, value) {
-          requestData.fields.add(fillMultiPart(key, value, "")!);
+      if (listBody != null) {
+        listBody.forEach((element) {
+          element.forEach((key, value) {
+            requestData.fields.add(fillMultiPart(key, value, "")!);
+          });
         });
+      } else {
+        if (body.isNotEmpty) {
+          body.forEach((key, value) {
+            requestData.fields.add(fillMultiPart(key, value, "")!);
+          });
+        }
       }
     } else {
-      requestData = body;
+      requestData = listBody ?? body;
     }
     var api = Dio(
       BaseOptions(
-        baseUrl: baseUrl,
+        baseUrl: optionalUrl ?? baseUrl,
         contentType: 'application/json; charset=UTF-8',
         responseType: ResponseType.json,
         headers: staticHeaders,
