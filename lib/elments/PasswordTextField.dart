@@ -17,11 +17,15 @@ class PasswordTextField extends CommonTextField {
     bool? showErrorAlways,
     String? labelText,
     String? errorText,
+    ValueChanged<String>? onChanged,
+    VoidCallback? onEditingComplete,
     TextAlign textAlign = TextAlign.start,
   }) : super(
           labelText: labelText ?? MyLanguagesKeys.password.toString().tr,
           controller: controller,
           enabled: enabled,
+    onEditingComplete: onEditingComplete,
+    onChanged: onChanged,
           isPasswordVisible: isPasswordVisible,
           showErrorAlways: showErrorAlways ?? true,
           endIconWidget: IconButton(

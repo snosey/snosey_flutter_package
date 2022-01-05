@@ -11,6 +11,8 @@ class PhoneTextField extends CommonTextField {
     bool readOnly = false,
     bool isRequired = true,
     String? initialValue,
+    ValueChanged<String>? onChanged,
+    VoidCallback? onEditingComplete,
     bool? showErrorAlways,
     String? labelText,
     String? errorText,
@@ -18,6 +20,8 @@ class PhoneTextField extends CommonTextField {
   }) : super(
           labelText: labelText ?? MyLanguagesKeys.phoneNumber.toString().tr,
           controller: controller,
+    onEditingComplete: onEditingComplete,
+    onChanged: onChanged,
           enabled: enabled,
     showErrorAlways: showErrorAlways??true,
           keyboardType: TextInputType.phone,

@@ -8,6 +8,8 @@ class NoteTextField extends CommonTextField {
     TextEditingController? controller,
     bool? enabled,
     bool readOnly = false,
+    ValueChanged<String>? onChanged,
+    VoidCallback? onEditingComplete,
     bool isRequired = true,
     String? initialValue,
     String? labelText,
@@ -17,6 +19,8 @@ class NoteTextField extends CommonTextField {
   }) : super(
           labelText: labelText??MyLanguagesKeys.notes.toString().tr,
           controller: controller,
+    onEditingComplete: onEditingComplete,
+    onChanged: onChanged,
     showErrorAlways: showErrorAlways??true,
           enabled: enabled,
           keyboardType: TextInputType.multiline,

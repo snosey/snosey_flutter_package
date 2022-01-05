@@ -13,6 +13,8 @@ class EmailTextField extends CommonTextField {
     bool isRequired = true,
     String? initialValue,
     bool? showErrorAlways,
+    ValueChanged<String>? onChanged,
+    VoidCallback? onEditingComplete,
     String? labelText,
     String? errorText,
     TextAlign textAlign = TextAlign.start,
@@ -20,6 +22,8 @@ class EmailTextField extends CommonTextField {
           labelText: labelText ?? MyLanguagesKeys.email.toString().tr,
           controller: controller,
           enabled: enabled,
+    onEditingComplete: onEditingComplete,
+    onChanged: onChanged,
           showErrorAlways: showErrorAlways??true,
           keyboardType: TextInputType.emailAddress,
           validator: (text) {

@@ -10,6 +10,8 @@ class NameTextField extends CommonTextField {
     bool readOnly = false,
     bool isRequired = true,
     String? initialValue,
+    ValueChanged<String>? onChanged,
+    VoidCallback? onEditingComplete,
     String? labelText,
     String? errorText,
     bool? showErrorAlways,
@@ -17,6 +19,8 @@ class NameTextField extends CommonTextField {
   }) : super(
           labelText: labelText??MyLanguagesKeys.name.toString().tr,
           controller: controller,
+    onEditingComplete: onEditingComplete,
+    onChanged: onChanged,
           enabled: enabled,
           showErrorAlways: showErrorAlways??true,
           keyboardType: TextInputType.name,

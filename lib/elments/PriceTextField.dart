@@ -1,7 +1,8 @@
-import '../MyLanguages.dart';import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
+import '../MyLanguages.dart';
 import 'CommonTextField.dart';
 
 class PriceTextField extends CommonTextField {
@@ -11,6 +12,8 @@ class PriceTextField extends CommonTextField {
     bool readOnly = false,
     bool isRequired = true,
     String? initialValue,
+    ValueChanged<String>? onChanged,
+    VoidCallback? onEditingComplete,
     bool? showErrorAlways,
     String? labelText,
     String? errorText,
@@ -19,6 +22,8 @@ class PriceTextField extends CommonTextField {
           labelText: labelText ?? MyLanguagesKeys.price.toString().tr,
           controller: controller,
           enabled: enabled,
+          onEditingComplete: onEditingComplete,
+          onChanged: onChanged,
           showErrorAlways: showErrorAlways ?? true,
           inputFormatters: [FilteringTextInputFormatter.digitsOnly],
           keyboardType: TextInputType.numberWithOptions(
