@@ -5,7 +5,6 @@ import '../MyLanguages.dart';
 import 'CommonTextField.dart';
 
 class PasswordTextField extends CommonTextField {
-
   PasswordTextField({
     required bool isPasswordVisible,
     required VoidCallback onChangeVisibleClick,
@@ -17,6 +16,8 @@ class PasswordTextField extends CommonTextField {
     bool? showErrorAlways,
     String? labelText,
     String? errorText,
+    Widget? startIconWidget,
+    Widget? endIconWidget,
     ValueChanged<String>? onChanged,
     VoidCallback? onEditingComplete,
     TextAlign textAlign = TextAlign.start,
@@ -24,15 +25,14 @@ class PasswordTextField extends CommonTextField {
           labelText: labelText ?? MyLanguagesKeys.password.toString().tr,
           controller: controller,
           enabled: enabled,
-    onEditingComplete: onEditingComplete,
-    onChanged: onChanged,
+          onEditingComplete: onEditingComplete,
+          onChanged: onChanged,
+          startIconWidget: startIconWidget,
           isPasswordVisible: isPasswordVisible,
           showErrorAlways: showErrorAlways ?? true,
           endIconWidget: IconButton(
             icon: Icon(
-              isPasswordVisible
-                  ? Icons.visibility
-                  : Icons.visibility_off,
+              isPasswordVisible ? Icons.visibility : Icons.visibility_off,
             ),
             onPressed: onChangeVisibleClick,
           ),
@@ -48,5 +48,4 @@ class PasswordTextField extends CommonTextField {
           readOnly: readOnly,
           textAlign: textAlign,
         );
-
 }

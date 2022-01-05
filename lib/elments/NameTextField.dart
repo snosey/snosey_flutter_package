@@ -12,6 +12,8 @@ class NameTextField extends CommonTextField {
     String? initialValue,
     ValueChanged<String>? onChanged,
     VoidCallback? onEditingComplete,
+    Widget? startIconWidget,
+    Widget? endIconWidget,
     String? labelText,
     String? errorText,
     bool? showErrorAlways,
@@ -22,6 +24,8 @@ class NameTextField extends CommonTextField {
     onEditingComplete: onEditingComplete,
     onChanged: onChanged,
           enabled: enabled,
+    endIconWidget: endIconWidget,
+    startIconWidget: startIconWidget,
           showErrorAlways: showErrorAlways??true,
           keyboardType: TextInputType.name,
           validator: (text) {
