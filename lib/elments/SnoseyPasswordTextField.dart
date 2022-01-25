@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../MyLanguages.dart';
+import '../utils/SnoseyLanguages.dart';
 import 'CommonTextField.dart';
 
-class PasswordTextField extends CommonTextField {
-  PasswordTextField({
+class SnoseyPasswordTextField extends CommonTextField {
+  SnoseyPasswordTextField({
     required bool isPasswordVisible,
     required VoidCallback onChangeVisibleClick,
     TextEditingController? controller,
@@ -22,7 +22,7 @@ class PasswordTextField extends CommonTextField {
     VoidCallback? onEditingComplete,
     TextAlign textAlign = TextAlign.start,
   }) : super(
-          labelText: labelText ?? MyLanguagesKeys.password.toString().tr,
+          labelText: labelText ?? SnoseyLanguagesKeys.password.toString().tr,
           controller: controller,
           enabled: enabled,
           onEditingComplete: onEditingComplete,
@@ -40,7 +40,7 @@ class PasswordTextField extends CommonTextField {
           validator: (text) {
             if (isRequired && (text == null || text.length < 6))
               return errorText ??
-                  MyLanguagesKeys.passwordHintError.toString().tr;
+                  SnoseyLanguagesKeys.passwordHintError.toString().tr;
             else
               return null;
           },

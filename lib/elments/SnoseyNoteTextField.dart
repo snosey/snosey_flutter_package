@@ -1,10 +1,10 @@
-import '../MyLanguages.dart';import 'package:flutter/material.dart';
+import '../utils/SnoseyLanguages.dart';import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import 'CommonTextField.dart';
 
-class NoteTextField extends CommonTextField {
-  NoteTextField({
+class SnoseyNoteTextField extends CommonTextField {
+  SnoseyNoteTextField({
     TextEditingController? controller,
     bool? enabled,
     bool readOnly = false,
@@ -19,7 +19,7 @@ class NoteTextField extends CommonTextField {
     String? errorText,
     TextAlign textAlign = TextAlign.start,
   }) : super(
-          labelText: labelText??MyLanguagesKeys.notes.toString().tr,
+          labelText: labelText??SnoseyLanguagesKeys.notes.toString().tr,
           controller: controller,
     onEditingComplete: onEditingComplete,
     onChanged: onChanged,
@@ -30,7 +30,7 @@ class NoteTextField extends CommonTextField {
           keyboardType: TextInputType.multiline,
           validator: (text) {
             if (isRequired && (text == null || text.isEmpty))
-              return errorText??MyLanguagesKeys.thisFieldRequired.toString().tr;
+              return errorText??SnoseyLanguagesKeys.thisFieldRequired.toString().tr;
             else
               return null;
           },

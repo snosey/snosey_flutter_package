@@ -1,19 +1,19 @@
-enum RequestState {
+enum SnoseyRequestState {
   Fetch,
   Error,
 }
 
-class ApiResponse {
+class SnoseyApiResponse {
   late bool success;
-  RequestState requestState;
+  SnoseyRequestState requestState;
   late String errorMessage;
   late String exceptionMessage;
-  Pagination pagination = Pagination();
+  SnoseyPagination pagination = SnoseyPagination();
   dynamic objectResponse;
 
-  ApiResponse({
+  SnoseyApiResponse({
     this.success = false,
-    this.requestState = RequestState.Fetch,
+    this.requestState = SnoseyRequestState.Fetch,
     this.errorMessage = "",
     this.exceptionMessage = "",
     this.objectResponse,
@@ -26,7 +26,7 @@ class ApiResponse {
   }
 }
 
-class Pagination {
+class SnoseyPagination {
   bool hasPagination = false;
   int currentPage = 0;
   int totalPages = 0;

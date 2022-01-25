@@ -1,36 +1,38 @@
-import '../MyLanguages.dart';import 'package:flutter/material.dart';
+import '../utils/SnoseyLanguages.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../utils/SnoseyLanguages.dart';
 import 'CommonTextField.dart';
 
-class NameTextField extends CommonTextField {
-  NameTextField({
+class SnoseyEmailTextField extends CommonTextField {
+  SnoseyEmailTextField({
     TextEditingController? controller,
     bool? enabled,
     bool readOnly = false,
     bool isRequired = true,
     String? initialValue,
+    bool? showErrorAlways,
     ValueChanged<String>? onChanged,
-    VoidCallback? onEditingComplete,
     Widget? startIconWidget,
     Widget? endIconWidget,
+    VoidCallback? onEditingComplete,
     String? labelText,
     String? errorText,
-    bool? showErrorAlways,
     TextAlign textAlign = TextAlign.start,
   }) : super(
-          labelText: labelText??MyLanguagesKeys.name.toString().tr,
+          labelText: labelText ?? SnoseyLanguagesKeys.email.toString().tr,
           controller: controller,
-    onEditingComplete: onEditingComplete,
-    onChanged: onChanged,
           enabled: enabled,
     endIconWidget: endIconWidget,
     startIconWidget: startIconWidget,
+    onEditingComplete: onEditingComplete,
+    onChanged: onChanged,
           showErrorAlways: showErrorAlways??true,
-          keyboardType: TextInputType.name,
+          keyboardType: TextInputType.emailAddress,
           validator: (text) {
-            if (isRequired && (text == null || text.isEmpty))
-              return errorText??MyLanguagesKeys.thisFieldRequired.toString().tr;
+            if (isRequired && (text == null || !GetUtils.isEmail(text)))
+              return errorText ?? SnoseyLanguagesKeys.emailError.toString().tr;
             else
               return null;
           },

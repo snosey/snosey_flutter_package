@@ -1,12 +1,11 @@
-import 'package:flutter/material.dart';
+import '../utils/SnoseyLanguages.dart';import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
-import '../MyLanguages.dart';
 import 'CommonTextField.dart';
 
-class PriceTextField extends CommonTextField {
-  PriceTextField({
+class SnoseyPhoneTextField extends CommonTextField {
+  SnoseyPhoneTextField({
     TextEditingController? controller,
     bool? enabled,
     bool readOnly = false,
@@ -21,22 +20,22 @@ class PriceTextField extends CommonTextField {
     String? errorText,
     TextAlign textAlign = TextAlign.start,
   }) : super(
-          labelText: labelText ?? MyLanguagesKeys.price.toString().tr,
+          labelText: labelText ?? SnoseyLanguagesKeys.phoneNumber.toString().tr,
           controller: controller,
-          enabled: enabled,
+    onEditingComplete: onEditingComplete,
+    onChanged: onChanged,
     endIconWidget: endIconWidget,
     startIconWidget: startIconWidget,
-          onEditingComplete: onEditingComplete,
-          onChanged: onChanged,
-          showErrorAlways: showErrorAlways ?? true,
+          enabled: enabled,
+    showErrorAlways: showErrorAlways??true,
+          keyboardType: TextInputType.phone,
           inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-          keyboardType: TextInputType.numberWithOptions(
-            decimal: true,
-            signed: false,
-          ),
           validator: (text) {
-            if (isRequired && (text == null || text.isEmpty))
-              return errorText ?? MyLanguagesKeys.priceError.toString().tr;
+            if (isRequired &&
+                (text == null ||
+                    !GetUtils.isPhoneNumber(text) ||
+                    (text.length != 10 && text.length != 11)))
+              return errorText??SnoseyLanguagesKeys.phoneHintError.toString().tr;
             else
               return null;
           },

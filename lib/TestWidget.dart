@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:snosey_flutter_package/elments/EmailTextField.dart';
-import 'package:snosey_flutter_package/elments/NameTextField.dart';
-import 'package:snosey_flutter_package/elments/NoteTextField.dart';
-import 'package:snosey_flutter_package/elments/PasswordTextField.dart';
-import 'package:snosey_flutter_package/elments/PhoneTextField.dart';
-import 'package:snosey_flutter_package/elments/PriceTextField.dart';
+import 'package:get_storage/get_storage.dart';
+import 'package:snosey_flutter_package/elments/SnoseyEmailTextField.dart';
+import 'package:snosey_flutter_package/elments/SnoseyNameTextField.dart';
+import 'package:snosey_flutter_package/elments/SnoseyNoteTextField.dart';
+import 'package:snosey_flutter_package/elments/SnoseyPasswordTextField.dart';
+import 'package:snosey_flutter_package/elments/SnoseyPhoneTextField.dart';
+import 'package:snosey_flutter_package/elments/SnoseyPriceTextField.dart';
+import 'package:snosey_flutter_package/elments/SnoseySearchTextField.dart';
 
 class TestWidget extends StatefulWidget {
   @override
@@ -14,6 +16,7 @@ class TestWidget extends StatefulWidget {
 
 class _TestWidgetState extends State<TestWidget> {
   var isPasswordVisible = false.obs;
+  TextEditingController searchController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -22,12 +25,20 @@ class _TestWidgetState extends State<TestWidget> {
       body: SafeArea(
         child: Column(
           children: [
-            NameTextField().marginAll(10),
-            EmailTextField().marginAll(10),
-            PhoneTextField().marginAll(10),
-            PriceTextField().marginAll(10),
-            NoteTextField().marginAll(10),
-            Obx(() => PasswordTextField(
+            SnoseyNameTextField().marginAll(10),
+            SnoseyEmailTextField().marginAll(10),
+            SnoseyPhoneTextField().marginAll(10),
+            SnoseyPriceTextField().marginAll(10),
+            SnoseyNoteTextField().marginAll(10),
+            SnoseySearchTextField(
+                controller: searchController,
+                inputDecoration: TextField().decoration!,
+                onEditingComplete: () {
+                },
+                onChanged: (text) {},
+                storage: GetStorage(),
+                searchKey: "test"),
+            Obx(() => SnoseyPasswordTextField(
                   onChangeVisibleClick: () {
                     isPasswordVisible.value = !isPasswordVisible.value;
                   },

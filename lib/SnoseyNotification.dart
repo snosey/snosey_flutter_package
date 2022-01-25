@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
-class CustomNotification {
+class SnoseyNotification {
   static List<NotificationGroup> _notificationGroups = [];
   static String _defaultLogo = "";
   static String _defaultSound = "";
@@ -40,7 +40,7 @@ class CustomNotification {
 
     final extra = json.decode(payload!);
 
-    NotificationGroup notificationGroup = CustomNotification._notificationGroups
+    NotificationGroup notificationGroup = SnoseyNotification._notificationGroups
         .firstWhere((element) => element.id == extra['Fk_NotificationType']);
     AndroidNotificationDetails androidNotificationDetails =
         AndroidNotificationDetails(notificationGroup.id, notificationGroup.name,
@@ -51,7 +51,7 @@ class CustomNotification {
             groupKey: notificationGroup.groupKey,
             playSound: true,
             sound: RawResourceAndroidNotificationSound(
-                CustomNotification._defaultSound),
+                SnoseyNotification._defaultSound),
             showWhen: true);
 
     IOSNotificationDetails iosNotificationDetails =
@@ -102,13 +102,13 @@ class CustomNotification {
     firebaseMessaging.getToken().then((value) {
       UserApis().editNotificationToken(value!);
     });*/
-    CustomNotification._onNotificationClick = onNotificationClick;
-    CustomNotification._notificationGroups = notificationGroups;
-    CustomNotification._defaultSound = defaultSound;
-    CustomNotification._defaultLogo = defaultLogo;
+    SnoseyNotification._onNotificationClick = onNotificationClick;
+    SnoseyNotification._notificationGroups = notificationGroups;
+    SnoseyNotification._defaultSound = defaultSound;
+    SnoseyNotification._defaultLogo = defaultLogo;
 
     FirebaseMessaging.onBackgroundMessage(
-        CustomNotification._firebaseMessagingBackgroundHandler);
+        SnoseyNotification._firebaseMessagingBackgroundHandler);
 
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
       print('Got a message whilst in the foreground!');
@@ -126,7 +126,7 @@ class CustomNotification {
 
     if (notificationAppLaunchDetails != null &&
         notificationAppLaunchDetails.didNotificationLaunchApp) {
-      CustomNotification._onNotificationClick(notificationAppLaunchDetails.payload);
+      SnoseyNotification._onNotificationClick(notificationAppLaunchDetails.payload);
     }
   }
 

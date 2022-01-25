@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:photo_view/photo_view_gallery.dart';
 
-class GalleryZoom {
+class SnoseyGalleryZoom {
   final List<String> imgList;
   final int currentIndex;
   final BuildContext context;
 
-  GalleryZoom(this.imgList, this.currentIndex, this.context) {
+  SnoseyGalleryZoom(this.imgList, this.currentIndex, this.context) {
     showModalBottomSheet<void>(
         context: context,
         isScrollControlled: true,

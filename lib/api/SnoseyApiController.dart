@@ -12,10 +12,10 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart'
 import 'package:http_parser/http_parser.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:snosey_flutter_package/Enums.dart';
-import 'package:snosey_flutter_package/api/ApiResponse.dart';
+import 'package:snosey_flutter_package/SnoseyEnums.dart';
+import 'package:snosey_flutter_package/api/SnoseyApiResponse.dart';
 
-class ApiController {
+class SnoseyApiController {
   static late String baseUrl;
   static String? appSecret;
   static String? apiKey;
@@ -28,33 +28,33 @@ class ApiController {
   static Map<String, String> staticParams = {};
   static String _cookies = "";
   final String apiUrl;
-  final RequestTypeEnum requestType;
+  final SnoseyRequestTypeEnum requestType;
   static Map<String, String> staticHeaders = {};
   static ByteData? _pemCer;
   static ByteData? _keyCer;
   static String? _secretCer;
-  Map<RequestTypeEnum, String> requestTypeMap = {
-    RequestTypeEnum.PUT: "PUT",
-    RequestTypeEnum.POST: "POST",
-    RequestTypeEnum.GET: "GET",
-    RequestTypeEnum.DELETE: "DELETE"
+  Map<SnoseyRequestTypeEnum, String> requestTypeMap = {
+    SnoseyRequestTypeEnum.PUT: "PUT",
+    SnoseyRequestTypeEnum.POST: "POST",
+    SnoseyRequestTypeEnum.GET: "GET",
+    SnoseyRequestTypeEnum.DELETE: "DELETE"
   };
 
-  ApiController(this.apiUrl, this.requestType);
+  SnoseyApiController(this.apiUrl, this.requestType);
 
   static init({
     required String baseUrl,
     required String serverErrorMessage,
   }) {
-    ApiController.baseUrl = baseUrl;
-    ApiController.serverErrorMessage = serverErrorMessage;
+    SnoseyApiController.baseUrl = baseUrl;
+    SnoseyApiController.serverErrorMessage = serverErrorMessage;
   }
 
   static _addCookies(String key, String value) {
     _cookies += "$key=$value;";
   }
 
-  Future<ApiResponse> sendRequest({
+  Future<SnoseyApiResponse> sendRequest({
     Map<String, dynamic> body = const {},
     List<Map<String, dynamic>>? listBody,
     Map<String, PlatformFile> files = const {},
@@ -172,7 +172,7 @@ class ApiController {
             .replaceAll(commaDecode, ","));
       }
 
-      var apiResponse = ApiResponse();
+      var apiResponse = SnoseyApiResponse();
       apiResponse.setStatus(jsonDecode(
           response.headers.value("x-status")!.replaceAll(commaDecode, ",")));
       if (response.headers.value("x-pagination") != null) {
@@ -214,7 +214,7 @@ class Auth {
 
   static init({
     required String appSecret,
-    required UserAgentEnum userAgent,
+    required SnoseyUserAgentEnum userAgent,
     required String apiKey,
     required String refreshTokenUrl,
     required String revokeTokenUrl,
@@ -222,24 +222,24 @@ class Auth {
     ByteData? keyCer,
     required String? secretCer,
   }) {
-    ApiController.refreshTokenUrl = refreshTokenUrl;
-    ApiController.revokeTokenUrl = revokeTokenUrl;
-    ApiController.staticHeaders["Secret"] = appSecret;
-    ApiController.staticHeaders["Api-Key"] = apiKey;
-    ApiController.staticHeaders["User-Platform"] =
+    SnoseyApiController.refreshTokenUrl = refreshTokenUrl;
+    SnoseyApiController.revokeTokenUrl = revokeTokenUrl;
+    SnoseyApiController.staticHeaders["Secret"] = appSecret;
+    SnoseyApiController.staticHeaders["Api-Key"] = apiKey;
+    SnoseyApiController.staticHeaders["User-Platform"] =
         userAgent.toString().replaceFirst("UserAgentEnum.", "");
-    ApiController._pemCer = pemCer;
-    ApiController._keyCer = keyCer;
-    ApiController._secretCer = secretCer;
+    SnoseyApiController._pemCer = pemCer;
+    SnoseyApiController._keyCer = keyCer;
+    SnoseyApiController._secretCer = secretCer;
   }
 
   static _setBearerToken({
     required String token,
     required String expiration,
   }) {
-    ApiController.authorization = token;
-    ApiController.authorizationExpired = expiration;
-    ApiController.staticHeaders["Authorization-Token"] = token;
+    SnoseyApiController.authorization = token;
+    SnoseyApiController.authorizationExpired = expiration;
+    SnoseyApiController.staticHeaders["Authorization-Token"] = token;
     var expirationMin = DateTime.now()
             .difference(_expirationFormat.parse(expiration))
             .inMinutes -
@@ -266,7 +266,7 @@ class Auth {
         _expirationFormat.parse(expires).isAfter(DateTime.now())) {
       bool isAuth = false;
 
-      await ApiController(ApiController.refreshTokenUrl!, RequestTypeEnum.POST)
+      await SnoseyApiController(SnoseyApiController.refreshTokenUrl!, SnoseyRequestTypeEnum.POST)
           .sendRequest(body: {"Token": token!}).then((value) {
         isAuth = true;
       }).onError((error, stackTrace) {
@@ -290,12 +290,12 @@ class Auth {
 
     bool isCleared = false;
 
-    await ApiController(ApiController.revokeTokenUrl!, RequestTypeEnum.POST)
+    await SnoseyApiController(SnoseyApiController.revokeTokenUrl!, SnoseyRequestTypeEnum.POST)
         .sendRequest(body: {"Token": token!}).then((value) {
       isCleared = true;
       if (_reNewExpirationTimer != null) _reNewExpirationTimer!.cancel();
-      if (ApiController.staticHeaders.containsKey("Authorization-Token"))
-        ApiController.staticHeaders.remove("Authorization-Token");
+      if (SnoseyApiController.staticHeaders.containsKey("Authorization-Token"))
+        SnoseyApiController.staticHeaders.remove("Authorization-Token");
 
       if (!kIsWeb) {
         final storage = new storageSecure.FlutterSecureStorage();
