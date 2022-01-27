@@ -1,6 +1,4 @@
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 enum SnoseyLanguagesKeys {
   language,
@@ -83,29 +81,25 @@ class SnoseyLanguages extends Translations {
   Map<String, String> _arStrings = {};
   Map<String, String> _enStrings = {};
 
-  static final _secondaryLanguage = 'ar';
-  static final _primaryLanguage = 'en';
-
   @override
   Map<String, Map<String, String>> get keys {
-    _addString(key: SnoseyLanguagesKeys.addressArea.toString(), arValue: 'المنطقه');
+    _addString(
+        key: SnoseyLanguagesKeys.addressArea.toString(), arValue: 'المنطقه');
     _addString(
         key: SnoseyLanguagesKeys.addNewAddress.toString(),
         arValue: 'اضف عنوان جديد');
     _addString(
         key: SnoseyLanguagesKeys.addressBuildName.toString(),
         arValue: 'اسم او رقم المبني');
-    _addString(
-        key: SnoseyLanguagesKeys.notes.toString(),
-        arValue: 'ملاحظات');
+    _addString(key: SnoseyLanguagesKeys.notes.toString(), arValue: 'ملاحظات');
 
     _addString(
         key: SnoseyLanguagesKeys.thisFieldRequired.toString(),
         arValue: 'هذا الحقل مطلوب');
 
-
     _addString(
-        key: SnoseyLanguagesKeys.email.toString(), arValue: 'البريد الالكتروني');
+        key: SnoseyLanguagesKeys.email.toString(),
+        arValue: 'البريد الالكتروني');
     _addString(
         key: SnoseyLanguagesKeys.emailError.toString(),
         arValue: 'البريد الالكتروني غير صحيح');
@@ -124,29 +118,31 @@ class SnoseyLanguages extends Translations {
         key: SnoseyLanguagesKeys.addressPhone2.toString(),
         arValue: 'رقم الهاتف الاحتياطي ( اختياري )');
     _addString(
-        key: SnoseyLanguagesKeys.addressNotes.toString(), arValue: 'ملاحظات اخرى');
+        key: SnoseyLanguagesKeys.addressNotes.toString(),
+        arValue: 'ملاحظات اخرى');
     _addString(
         key: SnoseyLanguagesKeys.addressStreetName.toString(),
         arValue: 'اسم الشارع');
 
-
-    _addString(key: SnoseyLanguagesKeys.favorite.toString(), arValue: 'المفضلة');
+    _addString(
+        key: SnoseyLanguagesKeys.favorite.toString(), arValue: 'المفضلة');
     _addString(key: SnoseyLanguagesKeys.price.toString(), arValue: 'السعر');
-    _addString(key: SnoseyLanguagesKeys.priceError.toString(), arValue: 'السعر غير صحيح');
-
-
-
-
+    _addString(
+        key: SnoseyLanguagesKeys.priceError.toString(),
+        arValue: 'السعر غير صحيح');
 
     _addString(key: SnoseyLanguagesKeys.ok.toString(), arValue: 'حسنا');
     _addString(
         key: SnoseyLanguagesKeys.paymentWay.toString(), arValue: 'طريقة الدفع');
     _addString(key: SnoseyLanguagesKeys.cash.toString(), arValue: 'نقدي');
-    _addString(key: SnoseyLanguagesKeys.visa.toString(), arValue: 'فيزا ( قريبا )');
+    _addString(
+        key: SnoseyLanguagesKeys.visa.toString(), arValue: 'فيزا ( قريبا )');
     _addString(key: SnoseyLanguagesKeys.cancel.toString(), arValue: 'الغاء');
-    _addString(key: SnoseyLanguagesKeys.login.toString(), arValue: 'تسجيل دخول');
+    _addString(
+        key: SnoseyLanguagesKeys.login.toString(), arValue: 'تسجيل دخول');
     _addString(key: SnoseyLanguagesKeys.call.toString(), arValue: 'اتصال');
-    _addString(key: SnoseyLanguagesKeys.info.toString(), arValue: 'ارقام و بيانات');
+    _addString(
+        key: SnoseyLanguagesKeys.info.toString(), arValue: 'ارقام و بيانات');
     _addString(key: SnoseyLanguagesKeys.wallet.toString(), arValue: 'المحفظة');
     _addString(key: SnoseyLanguagesKeys.close.toString(), arValue: 'اغلاق');
     _addString(key: SnoseyLanguagesKeys.home.toString(), arValue: 'الرئيسية');
@@ -155,10 +151,12 @@ class SnoseyLanguages extends Translations {
         arValue: 'لا يوجد نتائج');
 
     _addString(key: SnoseyLanguagesKeys.sortBy.toString(), arValue: 'رتب ب');
-    _addString(key: SnoseyLanguagesKeys.notifications.toString(), arValue: 'اخبار');
+    _addString(
+        key: SnoseyLanguagesKeys.notifications.toString(), arValue: 'اخبار');
     _addString(key: SnoseyLanguagesKeys.profile.toString(), arValue: 'صفحتي');
     _addString(key: SnoseyLanguagesKeys.setting.toString(), arValue: 'اعدادات');
-    _addString(key: SnoseyLanguagesKeys.addMore.toString(), arValue: 'اضف المزيد');
+    _addString(
+        key: SnoseyLanguagesKeys.addMore.toString(), arValue: 'اضف المزيد');
     _addString(
         key: SnoseyLanguagesKeys.serverError.toString(),
         arValue: 'حدث خطأ, برجاء المحاوله لاحقا');
@@ -172,7 +170,8 @@ class SnoseyLanguages extends Translations {
         key: SnoseyLanguagesKeys.verification.toString(),
         arValue: 'تأكيد رقم الهاتف');
     _addString(
-        key: SnoseyLanguagesKeys.shakawa.toString(), arValue: 'شكاوى و اقتراحات');
+        key: SnoseyLanguagesKeys.shakawa.toString(),
+        arValue: 'شكاوى و اقتراحات');
     _addString(
         key: SnoseyLanguagesKeys.callCenter.toString(), arValue: 'الدعم الفني');
     _addString(
@@ -188,11 +187,13 @@ class SnoseyLanguages extends Translations {
         key: SnoseyLanguagesKeys.loginWithGoogle.toString(),
         arValue: 'تسجيل دخول بحساب جوجل');
     _addString(
-        key: SnoseyLanguagesKeys.inviteFriends.toString(), arValue: 'دعوة اصدقاء');
+        key: SnoseyLanguagesKeys.inviteFriends.toString(),
+        arValue: 'دعوة اصدقاء');
     _addString(
         key: SnoseyLanguagesKeys.facebook.toString(),
         arValue: 'تابعنا على الفيسبوك');
-    _addString(key: SnoseyLanguagesKeys.aboutUs.toString(), arValue: 'من نحن ؟');
+    _addString(
+        key: SnoseyLanguagesKeys.aboutUs.toString(), arValue: 'من نحن ؟');
     _addString(
         key: SnoseyLanguagesKeys.cantBeEmpty.toString(),
         arValue: 'يجب ملئ البيانات المطلوبه');
@@ -207,8 +208,8 @@ class SnoseyLanguages extends Translations {
         arValue: 'تم ارسال طلبك بنجاح');
 
     _addString(
-        key: SnoseyLanguagesKeys.advancedSearch.toString(), arValue: 'بحث متقدم');
-
+        key: SnoseyLanguagesKeys.advancedSearch.toString(),
+        arValue: 'بحث متقدم');
 
     _addString(key: SnoseyLanguagesKeys.yes.toString(), arValue: 'نعم');
     _addString(key: SnoseyLanguagesKeys.no.toString(), arValue: 'لا');
@@ -218,8 +219,7 @@ class SnoseyLanguages extends Translations {
     _addString(key: SnoseyLanguagesKeys.name.toString(), arValue: 'الاسم');
 
     _addString(
-        key: SnoseyLanguagesKeys.password.toString(),
-        arValue: 'كلمة المرور');
+        key: SnoseyLanguagesKeys.password.toString(), arValue: 'كلمة المرور');
     _addString(
         key: SnoseyLanguagesKeys.phoneNumber.toString(), arValue: 'رقم الهاتف');
     _addString(
@@ -238,12 +238,11 @@ class SnoseyLanguages extends Translations {
         key: SnoseyLanguagesKeys.reSendCode.toString(),
         arValue: 'اعد ارسال الكود مره اخرى');
 
-    return {_primaryLanguage: _enStrings, _secondaryLanguage: _arStrings};
+    return {"en": _enStrings, "ar": _arStrings};
   }
 
   _addString({required String key, String? enValue, String? arValue}) {
     _enStrings[key] = enValue ?? arValue!;
     if (arValue != null) _arStrings[key] = arValue;
   }
-
 }

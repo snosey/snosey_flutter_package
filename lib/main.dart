@@ -7,12 +7,6 @@ import 'package:snosey_flutter_package/TestWidget.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 import 'utils/SnoseyLanguages.dart';
-import 'elments/SnoseyEmailTextField.dart';
-import 'elments/SnoseyNameTextField.dart';
-import 'elments/SnoseyNoteTextField.dart';
-import 'elments/SnoseyPhoneTextField.dart';
-import 'elments/SnoseyPriceTextField.dart';
-
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   timeago.setLocaleMessages('ar', timeago.ArMessages());

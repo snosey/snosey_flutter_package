@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:snosey_flutter_package/SnoseyFlutterPackage.dart';
-import 'package:snosey_flutter_package/dashboard/drawer/SnoseyDrawerUtils.dart';
 
 class SnoseyDrawerUtils {
-  final double drawerWidth = 270;
+  static final double minWidth = 1000;
+
+  static var isBigThanDrawer = (Get.width < minWidth).obs;
 
   checkScreenSize() {
     isBigThanDrawer.value = Get.width < minWidth;
@@ -15,8 +16,7 @@ class SnoseyDrawerWidget extends StatefulWidget {
   final Widget child;
   final AppBar? appBar;
 
-  SnoseyDrawerWidget(
-      {required this.child,  this.appBar});
+  SnoseyDrawerWidget({required this.child, this.appBar});
 
   @override
   State<StatefulWidget> createState() => _SnoseyDrawerWidgetState();
@@ -36,7 +36,7 @@ class _SnoseyDrawerWidgetState extends State<SnoseyDrawerWidget> {
             ? AppBar(
                 backgroundColor: widget.appBar!.backgroundColor,
                 centerTitle: false,
-                actions: widget.appBar!.actions,
+                actions: addSideMenuButton(),
                 title: widget.appBar!.title,
                 titleSpacing: 22,
                 bottom: widget.appBar!.bottom,
@@ -49,8 +49,8 @@ class _SnoseyDrawerWidgetState extends State<SnoseyDrawerWidget> {
                 leading: Navigator.canPop(context) ? BackButton() : null,
                 actions: [],
               ),
-        endDrawer: isBigThanDrawer.value
-            ? SafeArea(child: SnoseyFlutterPackage.drawerWidgetList)
+        endDrawer: SnoseyDrawerUtils.isBigThanDrawer.value
+            ? SafeArea(child: SnoseyFlutterPackage.drawerWidgetList(context))
             : null,
         body: SafeArea(
           child: LayoutBuilder(builder: (context, constraints) {
@@ -72,5 +72,18 @@ class _SnoseyDrawerWidgetState extends State<SnoseyDrawerWidget> {
         ),
       ),
     );
+  }
+
+  List<Widget> addSideMenuButton() {
+    List<Widget> actionList = [];
+    actionList.addAll(widget.appBar!.actions ?? []);
+    if (SnoseyDrawerUtils.isBigThanDrawer.value)
+      actionList.add(IconButton(
+        icon: Icon(Icons.menu),
+        onPressed: () {
+          Scaffold.of(baseContext).openEndDrawer();
+        },
+      ));
+    return actionList;
   }
 }

@@ -5,8 +5,7 @@ import 'package:snosey_flutter_package/api/SnoseyApiController.dart';
 class SnoseyFlutterPackage {
   static late String defaultLogoPath;
   static late String defaultFontPath;
-  static late ColorScheme defaultColorScheme;
-  static late Widget drawerWidgetList;
+  static late Widget Function(BuildContext) drawerWidgetList;
 
   static init({
     required String defaultLogoPath,
@@ -14,13 +13,12 @@ class SnoseyFlutterPackage {
     required String defaultFontPath,
     required String baseUrl,
     required String serverErrorMessage,
-    required Widget drawerWidgetList,
+    required Widget Function(BuildContext) drawerWidgetList,
   }) async {
     await GetStorage.init();
     SnoseyFlutterPackage.defaultLogoPath = defaultLogoPath;
     SnoseyFlutterPackage.defaultFontPath = defaultFontPath;
     SnoseyFlutterPackage.drawerWidgetList = drawerWidgetList;
-    SnoseyFlutterPackage.defaultColorScheme = defaultColorScheme;
     SnoseyApiController.init(
         baseUrl: baseUrl, serverErrorMessage: serverErrorMessage);
   }

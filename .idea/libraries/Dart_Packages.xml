@@ -229,7 +229,7 @@
         <entry key="excel">
           <value>
             <list>
-              <option value="$PROJECT_DIR$/../../flutter sdk/.pub-cache/git/excel-99192ed23007d562073631e56c61513a6beba60e/lib" />
+              <option value="$PROJECT_DIR$/../../flutter sdk/.pub-cache/hosted/pub.dartlang.org/excel-2.0.0-null-safety-3/lib" />
             </list>
           </value>
         </entry>
@@ -257,7 +257,7 @@
         <entry key="file_picker">
           <value>
             <list>
-              <option value="$PROJECT_DIR$/../../flutter sdk/.pub-cache/hosted/pub.dartlang.org/file_picker-4.3.1/lib" />
+              <option value="$PROJECT_DIR$/../../flutter sdk/.pub-cache/hosted/pub.dartlang.org/file_picker-4.3.2/lib" />
             </list>
           </value>
         </entry>
@@ -1076,7 +1076,6 @@
       </option>
     </properties>
     <CLASSES>
-      <root url="file://$PROJECT_DIR$/../../flutter sdk/.pub-cache/git/excel-99192ed23007d562073631e56c61513a6beba60e/lib" />
       <root url="file://$PROJECT_DIR$/../../flutter sdk/.pub-cache/hosted/pub.dartlang.org/_fe_analyzer_shared-32.0.0/lib" />
       <root url="file://$PROJECT_DIR$/../../flutter sdk/.pub-cache/hosted/pub.dartlang.org/analyzer-3.0.0/lib" />
       <root url="file://$PROJECT_DIR$/../../flutter sdk/.pub-cache/hosted/pub.dartlang.org/archive-3.1.9/lib" />
@@ -1109,10 +1108,11 @@
       <root url="file://$PROJECT_DIR$/../../flutter sdk/.pub-cache/hosted/pub.dartlang.org/dbus-0.6.6/lib" />
       <root url="file://$PROJECT_DIR$/../../flutter sdk/.pub-cache/hosted/pub.dartlang.org/dio-4.0.4/lib" />
       <root url="file://$PROJECT_DIR$/../../flutter sdk/.pub-cache/hosted/pub.dartlang.org/equatable-2.0.3/lib" />
+      <root url="file://$PROJECT_DIR$/../../flutter sdk/.pub-cache/hosted/pub.dartlang.org/excel-2.0.0-null-safety-3/lib" />
       <root url="file://$PROJECT_DIR$/../../flutter sdk/.pub-cache/hosted/pub.dartlang.org/fake_async-1.2.0/lib" />
       <root url="file://$PROJECT_DIR$/../../flutter sdk/.pub-cache/hosted/pub.dartlang.org/ffi-1.1.2/lib" />
       <root url="file://$PROJECT_DIR$/../../flutter sdk/.pub-cache/hosted/pub.dartlang.org/file-6.1.2/lib" />
-      <root url="file://$PROJECT_DIR$/../../flutter sdk/.pub-cache/hosted/pub.dartlang.org/file_picker-4.3.1/lib" />
+      <root url="file://$PROJECT_DIR$/../../flutter sdk/.pub-cache/hosted/pub.dartlang.org/file_picker-4.3.2/lib" />
       <root url="file://$PROJECT_DIR$/../../flutter sdk/.pub-cache/hosted/pub.dartlang.org/firebase_core-1.10.6/lib" />
       <root url="file://$PROJECT_DIR$/../../flutter sdk/.pub-cache/hosted/pub.dartlang.org/firebase_core_platform_interface-4.2.3/lib" />
       <root url="file://$PROJECT_DIR$/../../flutter sdk/.pub-cache/hosted/pub.dartlang.org/firebase_core_web-1.5.3/lib" />

@@ -2,7 +2,6 @@ import '../utils/SnoseyLanguages.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../utils/SnoseyLanguages.dart';
 import 'CommonTextField.dart';
 
 class SnoseyEmailTextField extends CommonTextField {

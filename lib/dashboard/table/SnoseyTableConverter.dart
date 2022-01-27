@@ -112,8 +112,8 @@ class SnoseyTableConverter {
 
     ////// insert cols //////
     for (int i = 0; i < headerList.length; i++) {
-      sheet!.setColAutoFit(i);
-      sheet.updateCell(
+      //sheet!.setColAutoFit(i);//TODO
+      sheet!.updateCell(
         CellIndex.indexByColumnRow(
           rowIndex: 0,
           columnIndex: i,

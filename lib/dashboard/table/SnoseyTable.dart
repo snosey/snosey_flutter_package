@@ -163,7 +163,8 @@ class _SnoseyTableWidgetState extends State<SnoseyTableWidget> {
                                         child: Icon(Icons.add),
                                         onPressed: widget.onAddNew,
                                         style: SnoseyButtonThemes
-                                            .iconButtonCircleTheme.style,
+                                                .iconButtonCircleTheme(context: context)
+                                            .style,
                                       )
                                     : Container(),
                                 widget.onFilter != null
@@ -171,7 +172,8 @@ class _SnoseyTableWidgetState extends State<SnoseyTableWidget> {
                                         child: Icon(Icons.filter_list_alt),
                                         onPressed: widget.onFilter,
                                         style: SnoseyButtonThemes
-                                            .iconButtonCircleTheme.style,
+                                                .iconButtonCircleTheme(context: context)
+                                            .style,
                                       )
                                     : Container(),
                                 widget.searchTextField != null
@@ -491,7 +493,7 @@ class _SnoseyTableWidgetState extends State<SnoseyTableWidget> {
       return Center(
         child: TextButton(
             onPressed: () {},
-            style: SnoseyButtonThemes.iconButtonCircleTheme.style,
+            style: SnoseyButtonThemes.iconButtonCircleTheme(context: context).style,
             child: Text(textValue)),
       );
     } else {

@@ -29,7 +29,7 @@ class SnoseyGalleryZoom {
               child: IconButton(
                   icon: Icon(
                     Icons.close,
-                    color: Theme.of(context).accentColor,
+                    color: Theme.of(context).colorScheme.error,
                   ),
                   onPressed: () {
                     Get.back();
@@ -80,9 +80,10 @@ class SnoseyGalleryZoom {
                                 decoration: BoxDecoration(
                                   shape: BoxShape.circle,
                                   color: _current.value == index
-                                      ? Theme.of(context).buttonColor
+                                      ? Theme.of(context).colorScheme.secondary
                                       : Theme.of(context)
-                                          .buttonColor
+                                          .colorScheme
+                                          .secondary
                                           .withOpacity(.3),
                                 ),
                               ),

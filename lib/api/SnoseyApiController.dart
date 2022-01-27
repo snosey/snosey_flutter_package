@@ -50,9 +50,9 @@ class SnoseyApiController {
     SnoseyApiController.serverErrorMessage = serverErrorMessage;
   }
 
-  static _addCookies(String key, String value) {
+/*  static _addCookies(String key, String value) {
     _cookies += "$key=$value;";
-  }
+  }*/
 
   Future<SnoseyApiResponse> sendRequest({
     Map<String, dynamic> body = const {},
@@ -110,7 +110,7 @@ class SnoseyApiController {
         extra: {
           "withCredentials": true,
         },
-        method: requestType.toString().replaceAll("RequestTypeEnum.", ""),
+        method: requestType.toString().replaceAll("SnoseyRequestTypeEnum.", ""),
       ),
     );
 
@@ -266,7 +266,8 @@ class Auth {
         _expirationFormat.parse(expires).isAfter(DateTime.now())) {
       bool isAuth = false;
 
-      await SnoseyApiController(SnoseyApiController.refreshTokenUrl!, SnoseyRequestTypeEnum.POST)
+      await SnoseyApiController(
+              SnoseyApiController.refreshTokenUrl!, SnoseyRequestTypeEnum.POST)
           .sendRequest(body: {"Token": token!}).then((value) {
         isAuth = true;
       }).onError((error, stackTrace) {
@@ -290,7 +291,8 @@ class Auth {
 
     bool isCleared = false;
 
-    await SnoseyApiController(SnoseyApiController.revokeTokenUrl!, SnoseyRequestTypeEnum.POST)
+    await SnoseyApiController(
+            SnoseyApiController.revokeTokenUrl!, SnoseyRequestTypeEnum.POST)
         .sendRequest(body: {"Token": token!}).then((value) {
       isCleared = true;
       if (_reNewExpirationTimer != null) _reNewExpirationTimer!.cancel();
@@ -320,7 +322,7 @@ class Auth {
         prefs.setString(key, value);
     });
   }
-
+/*
   static _setRefreshToken2(String cookies) async {
     final storage = new storageSecure.FlutterSecureStorage();
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -335,5 +337,5 @@ class Auth {
         }
       }
     });
-  }
+  }*/
 }

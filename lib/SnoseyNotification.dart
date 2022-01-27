@@ -1,13 +1,38 @@
 import 'dart:convert';
+import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:snosey_flutter_package/api/SnoseyNotificationExtraModel.dart';
 
 class SnoseyNotification {
-  static List<NotificationGroup> _notificationGroups = [];
-  static String _defaultLogo = "";
-  static String _defaultSound = "";
-  static late Future<dynamic> Function(String? payload) _onNotificationClick;
+  static late String _defaultLogo;
+
+  static late String _defaultSound;
+  static late Function(
+      {required int fkNotification,
+      required int fkNotificationOpenType,
+      required dynamic isFCM,
+      required String target}) _handleOpenNotification;
+  static FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+      FlutterLocalNotificationsPlugin();
+  static Future<dynamic> Function(String? payload) _onNotificationClick =
+      (notificationPayload) async {
+    if (notificationPayload == null) return;
+    var notificationPayLoadModel =
+        SnoseyNotificationExtraModel.fromJson(jsonDecode(notificationPayload));
+    _handleOpenNotification(
+      fkNotification: notificationPayLoadModel.NotificationId,
+      fkNotificationOpenType: notificationPayLoadModel.Fk_NotificationOpenType,
+      target: notificationPayLoadModel.Target,
+      isFCM: true,
+    );
+  };
+
+  static late List<NotificationGroup> _notificationGroups;
 
   static _displayNotification(
       {String? title,
@@ -19,47 +44,68 @@ class SnoseyNotification {
       body = message.data['Body'];
       payload = message.data['Extra'];
     }
-    FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-        FlutterLocalNotificationsPlugin();
-// initialise the plugin. app_icon needs to be a added as a drawable resource to the Android head projectAndroidInitializationSettings initializationSettingsAndroid =
-    AndroidInitializationSettings initializationSettingsAndroid =
-        AndroidInitializationSettings(_defaultLogo);
 
-    final IOSInitializationSettings initializationSettingsIOS =
-        IOSInitializationSettings(
-            requestAlertPermission: true,
-            requestBadgePermission: true,
-            requestSoundPermission: true,
-            onDidReceiveLocalNotification: _onDidReceiveLocalNotification);
-    final InitializationSettings initializationSettings =
-        InitializationSettings(
-            android: initializationSettingsAndroid,
-            iOS: initializationSettingsIOS);
-    await flutterLocalNotificationsPlugin.initialize(initializationSettings,
-        onSelectNotification: _onNotificationClick);
+    final extra = SnoseyNotificationExtraModel.fromJson(json.decode(payload!));
 
-    final extra = json.decode(payload!);
+    NotificationGroup notificationGroup = _notificationGroups.firstWhere(
+        (element) => element.id == extra.Fk_NotificationType.toString());
 
-    NotificationGroup notificationGroup = SnoseyNotification._notificationGroups
-        .firstWhere((element) => element.id == extra['Fk_NotificationType']);
+    var largeIcon = "", coverIcon = "";
+    if (extra.LogoUrl.isNotEmpty)
+      largeIcon = await _downloadAndSaveFile(extra.LogoUrl,
+          extra.LogoUrl.substring(extra.LogoUrl.lastIndexOf("/")));
+
+    if (extra.ImgUrl.isNotEmpty)
+      coverIcon = await _downloadAndSaveFile(
+          extra.ImgUrl, extra.ImgUrl.substring(extra.ImgUrl.lastIndexOf("/")));
+
     AndroidNotificationDetails androidNotificationDetails =
         AndroidNotificationDetails(notificationGroup.id, notificationGroup.name,
             importance: Importance.max,
             priority: Priority.high,
+            vibrationPattern: Int64List.fromList([1000, 1000, 500, 1000, 1000]),
             channelShowBadge: true,
             enableVibration: true,
             groupKey: notificationGroup.groupKey,
+            largeIcon:
+                largeIcon.isEmpty ? null : FilePathAndroidBitmap(largeIcon),
+            styleInformation: coverIcon.isEmpty
+                ? null
+                : BigPictureStyleInformation(
+                    FilePathAndroidBitmap(coverIcon),
+                  ),
             playSound: true,
             sound: RawResourceAndroidNotificationSound(
                 SnoseyNotification._defaultSound),
             showWhen: true);
 
-    IOSNotificationDetails iosNotificationDetails =
-        IOSNotificationDetails(threadIdentifier: notificationGroup.id);
+    IOSNotificationDetails iosNotificationDetails = IOSNotificationDetails(
+        threadIdentifier: notificationGroup.id,
+        sound: _defaultSound + ".wav",
+        attachments: coverIcon.isEmpty
+            ? null
+            : <IOSNotificationAttachment>[
+                //       IOSNotificationAttachment(largeIcon),
+                IOSNotificationAttachment(coverIcon),
+              ]);
 
     NotificationDetails platformChannelSpecifics = NotificationDetails(
         android: androidNotificationDetails, iOS: iosNotificationDetails);
+    await FirebaseMessaging.instance.requestPermission(
+      alert: true,
+      announcement: false,
+      badge: true,
+      carPlay: true,
+      criticalAlert: false,
+      sound: true,
+    );
 
+    await FirebaseMessaging.instance
+        .setForegroundNotificationPresentationOptions(
+      alert: true, // Required to display a heads up notification
+      badge: true,
+      sound: true,
+    );
     await flutterLocalNotificationsPlugin
         .resolvePlatformSpecificImplementation<
             IOSFlutterLocalNotificationsPlugin>()
@@ -70,8 +116,7 @@ class SnoseyNotification {
         );
 
     await flutterLocalNotificationsPlugin.show(
-        int.parse(
-            "${extra['Target']}${notificationGroup.id}"),
+        int.parse("${extra.NotificationId}${notificationGroup.id}"),
         title,
         body,
         platformChannelSpecifics,
@@ -82,51 +127,64 @@ class SnoseyNotification {
 
   static Future<void> _firebaseMessagingBackgroundHandler(
       RemoteMessage message) async {
-    _displayNotification(message: message);
+    print("backgroundddd//" + message.data.toString());
   }
 
   static Future _onDidReceiveLocalNotification(
       int id, String? title, String? body, String? payload) async {
-    _displayNotification(title: title, body: body, payload: payload);
+    //   _displayNotification(title: title, body: body, payload: payload); //TODO
   }
 
-  static init({
-    required List<NotificationGroup> notificationGroups,
-    required String defaultSound,
-    required String defaultLogo,
-    required Future<dynamic> Function(String? payload) onNotificationClick,
-  }) async {
-    /* Add in main application
-    await Firebase.initializeApp();
-    firebaseMessaging = FirebaseMessaging.instance;
-    firebaseMessaging.getToken().then((value) {
-      UserApis().editNotificationToken(value!);
-    });*/
-    SnoseyNotification._onNotificationClick = onNotificationClick;
+  static init(
+      {required String defaultLogo,
+      required String defaultSound,
+      required List<NotificationGroup> notificationGroups,
+      required Function(
+              {required int fkNotification,
+              required int fkNotificationOpenType,
+              required dynamic isFCM,
+              required String target})
+          handleOpenNotification}) async {
+    SnoseyNotification._handleOpenNotification = handleOpenNotification;
     SnoseyNotification._notificationGroups = notificationGroups;
-    SnoseyNotification._defaultSound = defaultSound;
     SnoseyNotification._defaultLogo = defaultLogo;
+    SnoseyNotification._defaultSound = defaultSound;
+    // initialise the plugin. app_icon needs to be a added as a drawable resource to the Android head projectAndroidInitializationSettings initializationSettingsAndroid =
+    AndroidInitializationSettings initializationSettingsAndroid =
+        AndroidInitializationSettings(_defaultLogo);
+
+    final IOSInitializationSettings initializationSettingsIOS =
+        IOSInitializationSettings(
+            onDidReceiveLocalNotification: _onDidReceiveLocalNotification);
+    final InitializationSettings initializationSettings =
+        InitializationSettings(
+            android: initializationSettingsAndroid,
+            iOS: initializationSettingsIOS);
+    await flutterLocalNotificationsPlugin.initialize(initializationSettings,
+        onSelectNotification: _onNotificationClick);
 
     FirebaseMessaging.onBackgroundMessage(
         SnoseyNotification._firebaseMessagingBackgroundHandler);
 
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      print('Got a message whilst in the foreground!');
-      print('Message data: ${message.data}');
-      if (message.notification != null) {
-        print('Message also contained a notification: ${message.notification}');
-      }
-      _displayNotification(message: message);
+      //Foreground message in ios send auto ... android need to show manual
+      if (Platform.isAndroid) _displayNotification(message: message);
     });
 
-    //check if notification open from background
+    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+      //background message
+      onTapRemoteMessage(message);
+    });
+
+    //check if notification open from deeplinking
     final NotificationAppLaunchDetails? notificationAppLaunchDetails =
         await FlutterLocalNotificationsPlugin()
             .getNotificationAppLaunchDetails();
 
     if (notificationAppLaunchDetails != null &&
         notificationAppLaunchDetails.didNotificationLaunchApp) {
-      SnoseyNotification._onNotificationClick(notificationAppLaunchDetails.payload);
+      SnoseyNotification._onNotificationClick(
+          notificationAppLaunchDetails.payload);
     }
   }
 
@@ -148,8 +206,8 @@ class SnoseyNotification {
         lines,
       );
       AndroidNotificationDetails groupNotificationDetails =
-          AndroidNotificationDetails(notificationGroup.id,
-              notificationGroup.name,
+          AndroidNotificationDetails(
+              notificationGroup.id, notificationGroup.name,
               styleInformation: inboxStyleInformation,
               setAsGroupSummary: true,
               groupKey: notificationGroup.groupKey);
@@ -158,6 +216,17 @@ class SnoseyNotification {
       await flutterLocalNotificationPlugin.show(
           0, '', '', groupNotificationDetailsPlatformSpecifics);
     }
+  }
+
+  static void onTapRemoteMessage(RemoteMessage message) {
+    final extra = SnoseyNotificationExtraModel.fromJson(
+        json.decode(message.data['Extra']!));
+    _handleOpenNotification(
+      fkNotification: extra.NotificationId,
+      fkNotificationOpenType: extra.Fk_NotificationOpenType,
+      target: extra.Target,
+      isFCM: true,
+    );
   }
 }
 
@@ -171,4 +240,15 @@ class NotificationGroup {
     required this.id,
     required this.groupKey,
   });
+}
+
+Future<String> _downloadAndSaveFile(String url, String fileName) async {
+  final Directory directory = await getApplicationDocumentsDirectory();
+  final String filePath = '${directory.path}/$fileName';
+  final File file = File(filePath);
+  var image = (await NetworkAssetBundle(
+    Uri.parse(url),
+  ).load(url));
+  await file.writeAsBytes(image.buffer.asUint8List());
+  return filePath;
 }
