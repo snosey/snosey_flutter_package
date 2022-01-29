@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class SnoseyTabBarItem {
+class DinnovaTabBarItem {
   final Object? key;
   Widget _widget;
   String tabText;
@@ -8,7 +8,7 @@ class SnoseyTabBarItem {
   bool isScroll;
   ScrollController? scrollController;
 
-  SnoseyTabBarItem(
+  DinnovaTabBarItem(
     this._widget, {
     required this.tabText,
     required this.tabIcon,

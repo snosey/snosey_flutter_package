@@ -1,6 +1,6 @@
 import 'package:get_storage/get_storage.dart';
 
-class SnoseyStorageManager {
+class DinnovaStorageManager {
   static GetStorage prefs = GetStorage();
 
   static saveData(String key, dynamic value) {

@@ -1,19 +1,19 @@
-enum SnoseyRequestState {
+enum DinnovaRequestState {
   Fetch,
   Error,
 }
 
-class SnoseyApiResponse {
+class DinnovaApiResponse {
   late bool success;
-  SnoseyRequestState requestState;
+  DinnovaRequestState requestState;
   late String errorMessage;
   late String exceptionMessage;
-  SnoseyPagination pagination = SnoseyPagination();
+  DinnovaPagination pagination = DinnovaPagination();
   dynamic objectResponse;
 
-  SnoseyApiResponse({
+  DinnovaApiResponse({
     this.success = false,
-    this.requestState = SnoseyRequestState.Fetch,
+    this.requestState = DinnovaRequestState.Fetch,
     this.errorMessage = "",
     this.exceptionMessage = "",
     this.objectResponse,
@@ -26,7 +26,7 @@ class SnoseyApiResponse {
   }
 }
 
-class SnoseyPagination {
+class DinnovaPagination {
   bool hasPagination = false;
   int currentPage = 0;
   int totalPages = 0;

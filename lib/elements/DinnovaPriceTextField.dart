@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
-import '../utils/SnoseyLanguages.dart';
+import '../utils/DinnovaLanguages.dart';
 import 'CommonTextField.dart';
 
-class SnoseyPriceTextField extends CommonTextField {
-  SnoseyPriceTextField({
+class DinnovaPriceTextField extends CommonTextField {
+  DinnovaPriceTextField({
     TextEditingController? controller,
     bool? enabled,
     bool readOnly = false,
@@ -21,7 +21,7 @@ class SnoseyPriceTextField extends CommonTextField {
     String? errorText,
     TextAlign textAlign = TextAlign.start,
   }) : super(
-          labelText: labelText ?? SnoseyLanguagesKeys.price.toString().tr,
+          labelText: labelText ?? DinnovaLanguagesKeys.price.toString().tr,
           controller: controller,
           enabled: enabled,
     endIconWidget: endIconWidget,
@@ -36,7 +36,7 @@ class SnoseyPriceTextField extends CommonTextField {
           ),
           validator: (text) {
             if (isRequired && (text == null || text.isEmpty))
-              return errorText ?? SnoseyLanguagesKeys.priceError.toString().tr;
+              return errorText ?? DinnovaLanguagesKeys.priceError.toString().tr;
             else
               return null;
           },

@@ -12,10 +12,10 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart'
 import 'package:http_parser/http_parser.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:snosey_flutter_package/SnoseyEnums.dart';
-import 'package:snosey_flutter_package/api/SnoseyApiResponse.dart';
+import 'package:dinnova/DinnovaEnums.dart';
+import 'package:dinnova/api/DinnovaApiResponse.dart';
 
-class SnoseyApiController {
+class DinnovaApiController {
   static late String baseUrl;
   static String? appSecret;
   static String? apiKey;
@@ -28,33 +28,33 @@ class SnoseyApiController {
   static Map<String, String> staticParams = {};
   static String _cookies = "";
   final String apiUrl;
-  final SnoseyRequestTypeEnum requestType;
+  final DinnovaRequestTypeEnum requestType;
   static Map<String, String> staticHeaders = {};
   static ByteData? _pemCer;
   static ByteData? _keyCer;
   static String? _secretCer;
-  Map<SnoseyRequestTypeEnum, String> requestTypeMap = {
-    SnoseyRequestTypeEnum.PUT: "PUT",
-    SnoseyRequestTypeEnum.POST: "POST",
-    SnoseyRequestTypeEnum.GET: "GET",
-    SnoseyRequestTypeEnum.DELETE: "DELETE"
+  Map<DinnovaRequestTypeEnum, String> requestTypeMap = {
+    DinnovaRequestTypeEnum.PUT: "PUT",
+    DinnovaRequestTypeEnum.POST: "POST",
+    DinnovaRequestTypeEnum.GET: "GET",
+    DinnovaRequestTypeEnum.DELETE: "DELETE"
   };
 
-  SnoseyApiController(this.apiUrl, this.requestType);
+  DinnovaApiController(this.apiUrl, this.requestType);
 
   static init({
     required String baseUrl,
     required String serverErrorMessage,
   }) {
-    SnoseyApiController.baseUrl = baseUrl;
-    SnoseyApiController.serverErrorMessage = serverErrorMessage;
+    DinnovaApiController.baseUrl = baseUrl;
+    DinnovaApiController.serverErrorMessage = serverErrorMessage;
   }
 
 /*  static _addCookies(String key, String value) {
     _cookies += "$key=$value;";
   }*/
 
-  Future<SnoseyApiResponse> sendRequest({
+  Future<DinnovaApiResponse> sendRequest({
     Map<String, dynamic> body = const {},
     List<Map<String, dynamic>>? listBody,
     Map<String, PlatformFile> files = const {},
@@ -110,7 +110,7 @@ class SnoseyApiController {
         extra: {
           "withCredentials": true,
         },
-        method: requestType.toString().replaceAll("SnoseyRequestTypeEnum.", ""),
+        method: requestType.toString().replaceAll("DinnovaRequestTypeEnum.", ""),
       ),
     );
 
@@ -172,7 +172,7 @@ class SnoseyApiController {
             .replaceAll(commaDecode, ","));
       }
 
-      var apiResponse = SnoseyApiResponse();
+      var apiResponse = DinnovaApiResponse();
       apiResponse.setStatus(jsonDecode(
           response.headers.value("x-status")!.replaceAll(commaDecode, ",")));
       if (response.headers.value("x-pagination") != null) {
@@ -214,7 +214,7 @@ class Auth {
 
   static init({
     required String appSecret,
-    required SnoseyUserAgentEnum userAgent,
+    required DinnovaUserAgentEnum userAgent,
     required String apiKey,
     required String refreshTokenUrl,
     required String revokeTokenUrl,
@@ -222,24 +222,24 @@ class Auth {
     ByteData? keyCer,
     required String? secretCer,
   }) {
-    SnoseyApiController.refreshTokenUrl = refreshTokenUrl;
-    SnoseyApiController.revokeTokenUrl = revokeTokenUrl;
-    SnoseyApiController.staticHeaders["Secret"] = appSecret;
-    SnoseyApiController.staticHeaders["Api-Key"] = apiKey;
-    SnoseyApiController.staticHeaders["User-Platform"] =
+    DinnovaApiController.refreshTokenUrl = refreshTokenUrl;
+    DinnovaApiController.revokeTokenUrl = revokeTokenUrl;
+    DinnovaApiController.staticHeaders["Secret"] = appSecret;
+    DinnovaApiController.staticHeaders["Api-Key"] = apiKey;
+    DinnovaApiController.staticHeaders["User-Platform"] =
         userAgent.toString().replaceFirst("UserAgentEnum.", "");
-    SnoseyApiController._pemCer = pemCer;
-    SnoseyApiController._keyCer = keyCer;
-    SnoseyApiController._secretCer = secretCer;
+    DinnovaApiController._pemCer = pemCer;
+    DinnovaApiController._keyCer = keyCer;
+    DinnovaApiController._secretCer = secretCer;
   }
 
   static _setBearerToken({
     required String token,
     required String expiration,
   }) {
-    SnoseyApiController.authorization = token;
-    SnoseyApiController.authorizationExpired = expiration;
-    SnoseyApiController.staticHeaders["Authorization-Token"] = token;
+    DinnovaApiController.authorization = token;
+    DinnovaApiController.authorizationExpired = expiration;
+    DinnovaApiController.staticHeaders["Authorization-Token"] = token;
     var expirationMin = DateTime.now()
             .difference(_expirationFormat.parse(expiration))
             .inMinutes -
@@ -266,8 +266,8 @@ class Auth {
         _expirationFormat.parse(expires).isAfter(DateTime.now())) {
       bool isAuth = false;
 
-      await SnoseyApiController(
-              SnoseyApiController.refreshTokenUrl!, SnoseyRequestTypeEnum.POST)
+      await DinnovaApiController(
+              DinnovaApiController.refreshTokenUrl!, DinnovaRequestTypeEnum.POST)
           .sendRequest(body: {"Token": token!}).then((value) {
         isAuth = true;
       }).onError((error, stackTrace) {
@@ -291,13 +291,13 @@ class Auth {
 
     bool isCleared = false;
 
-    await SnoseyApiController(
-            SnoseyApiController.revokeTokenUrl!, SnoseyRequestTypeEnum.POST)
+    await DinnovaApiController(
+            DinnovaApiController.revokeTokenUrl!, DinnovaRequestTypeEnum.POST)
         .sendRequest(body: {"Token": token!}).then((value) {
       isCleared = true;
       if (_reNewExpirationTimer != null) _reNewExpirationTimer!.cancel();
-      if (SnoseyApiController.staticHeaders.containsKey("Authorization-Token"))
-        SnoseyApiController.staticHeaders.remove("Authorization-Token");
+      if (DinnovaApiController.staticHeaders.containsKey("Authorization-Token"))
+        DinnovaApiController.staticHeaders.remove("Authorization-Token");
 
       if (!kIsWeb) {
         final storage = new storageSecure.FlutterSecureStorage();

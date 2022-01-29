@@ -1,13 +1,13 @@
+import 'package:dinnova/elements/DinnovaEmailTextField.dart';
+import 'package:dinnova/elements/DinnovaNameTextField.dart';
+import 'package:dinnova/elements/DinnovaNoteTextField.dart';
+import 'package:dinnova/elements/DinnovaPasswordTextField.dart';
+import 'package:dinnova/elements/DinnovaPhoneTextField.dart';
+import 'package:dinnova/elements/DinnovaPriceTextField.dart';
+import 'package:dinnova/elements/DinnovaSearchTextField.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:snosey_flutter_package/elments/SnoseyEmailTextField.dart';
-import 'package:snosey_flutter_package/elments/SnoseyNameTextField.dart';
-import 'package:snosey_flutter_package/elments/SnoseyNoteTextField.dart';
-import 'package:snosey_flutter_package/elments/SnoseyPasswordTextField.dart';
-import 'package:snosey_flutter_package/elments/SnoseyPhoneTextField.dart';
-import 'package:snosey_flutter_package/elments/SnoseyPriceTextField.dart';
-import 'package:snosey_flutter_package/elments/SnoseySearchTextField.dart';
 
 class TestWidget extends StatefulWidget {
   @override
@@ -25,20 +25,19 @@ class _TestWidgetState extends State<TestWidget> {
       body: SafeArea(
         child: Column(
           children: [
-            SnoseyNameTextField().marginAll(10),
-            SnoseyEmailTextField().marginAll(10),
-            SnoseyPhoneTextField().marginAll(10),
-            SnoseyPriceTextField().marginAll(10),
-            SnoseyNoteTextField().marginAll(10),
-            SnoseySearchTextField(
+            DinnovaNameTextField().marginAll(10),
+            DinnovaEmailTextField().marginAll(10),
+            DinnovaPhoneTextField().marginAll(10),
+            DinnovaPriceTextField().marginAll(10),
+            DinnovaNoteTextField().marginAll(10),
+            DinnovaSearchTextField(
                 controller: searchController,
                 inputDecoration: TextField().decoration!,
-                onEditingComplete: () {
-                },
+                onEditingComplete: () {},
                 onChanged: (text) {},
                 storage: GetStorage(),
                 searchKey: "test"),
-            Obx(() => SnoseyPasswordTextField(
+            Obx(() => DinnovaPasswordTextField(
                   onChangeVisibleClick: () {
                     isPasswordVisible.value = !isPasswordVisible.value;
                   },

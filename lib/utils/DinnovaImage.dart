@@ -1,10 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:snosey_flutter_package/SnoseyFlutterPackage.dart';
+import 'package:dinnova/DinnovaFlutterPackage.dart';
 
-import 'SnoseyProgressLoading.dart';
+import 'DinnovaProgressLoading.dart';
 
-class SnoseyImage {
+class DinnovaImage {
   static Widget getImage(
     String url, {
     fit = BoxFit.cover,
@@ -19,9 +19,9 @@ class SnoseyImage {
       height: height,
       placeholder: (context, __) =>
           indicator ??
-          Center(child: SnoseyProgressLoading.showIndicator(context)),
+          Center(child: DinnovaProgressLoading.showIndicator(context)),
       errorWidget: (context, url, error) =>
-          Image.asset(SnoseyFlutterPackage.defaultLogoPath),
+          Image.asset(DinnovaFlutterPackage.defaultLogoPath),
     );
   }
 }

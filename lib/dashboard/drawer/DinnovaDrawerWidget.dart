@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:snosey_flutter_package/SnoseyFlutterPackage.dart';
+import 'package:dinnova/DinnovaFlutterPackage.dart';
 
-class SnoseyDrawerUtils {
+class DinnovaDrawerUtils {
   static final double minWidth = 1000;
 
   static var isBigThanDrawer = (Get.width < minWidth).obs;
@@ -12,18 +12,18 @@ class SnoseyDrawerUtils {
   }
 }
 
-class SnoseyDrawerWidget extends StatefulWidget {
+class DinnovaDrawerWidget extends StatefulWidget {
   final Widget child;
   final AppBar? appBar;
 
-  SnoseyDrawerWidget({required this.child, this.appBar});
+  DinnovaDrawerWidget({required this.child, this.appBar});
 
   @override
-  State<StatefulWidget> createState() => _SnoseyDrawerWidgetState();
+  State<StatefulWidget> createState() => _DinnovaDrawerWidgetState();
 }
 
-class _SnoseyDrawerWidgetState extends State<SnoseyDrawerWidget> {
-  SnoseyDrawerUtils customDrawerUtils = SnoseyDrawerUtils();
+class _DinnovaDrawerWidgetState extends State<DinnovaDrawerWidget> {
+  DinnovaDrawerUtils customDrawerUtils = DinnovaDrawerUtils();
   double iconSize = 20;
 
   late BuildContext baseContext;
@@ -49,8 +49,8 @@ class _SnoseyDrawerWidgetState extends State<SnoseyDrawerWidget> {
                 leading: Navigator.canPop(context) ? BackButton() : null,
                 actions: [],
               ),
-        endDrawer: SnoseyDrawerUtils.isBigThanDrawer.value
-            ? SafeArea(child: SnoseyFlutterPackage.drawerWidgetList(context))
+        endDrawer: DinnovaDrawerUtils.isBigThanDrawer.value
+            ? SafeArea(child: DinnovaFlutterPackage.drawerWidgetList(context))
             : null,
         body: SafeArea(
           child: LayoutBuilder(builder: (context, constraints) {
@@ -77,7 +77,7 @@ class _SnoseyDrawerWidgetState extends State<SnoseyDrawerWidget> {
   List<Widget> addSideMenuButton() {
     List<Widget> actionList = [];
     actionList.addAll(widget.appBar!.actions ?? []);
-    if (SnoseyDrawerUtils.isBigThanDrawer.value)
+    if (DinnovaDrawerUtils.isBigThanDrawer.value)
       actionList.add(IconButton(
         icon: Icon(Icons.menu),
         onPressed: () {

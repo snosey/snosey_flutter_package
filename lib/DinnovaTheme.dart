@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:snosey_flutter_package/utils/SnoseySizes.dart';
+import 'package:dinnova/utils/DinnovaSizes.dart';
 
-class SnoseyButtonThemes {
+class DinnovaButtonThemes {
   static final double _maxButtonHeight = 40.0;
   static final double _maxButtonWidth = 300.0;
 
@@ -19,7 +19,7 @@ class SnoseyButtonThemes {
           maximumSize: Size(_maxButtonWidth, _maxButtonHeight),
           elevation: 0,
           shape: RoundedRectangleBorder(
-            borderRadius: SnoseySizes.defaultBorderRadius,
+            borderRadius: DinnovaSizes.defaultBorderRadius,
           )),
     );
   }
@@ -54,7 +54,7 @@ class SnoseyButtonThemes {
           maximumSize: Size(_maxButtonWidth, _maxButtonHeight),
           elevation: 0,
           shape: RoundedRectangleBorder(
-            borderRadius: SnoseySizes.recBorderRadius,
+            borderRadius: DinnovaSizes.recBorderRadius,
           )),
     );
   }
@@ -72,7 +72,7 @@ class SnoseyButtonThemes {
           maximumSize: Size(_maxButtonWidth, _maxButtonHeight),
           elevation: 0,
           shape: RoundedRectangleBorder(
-            borderRadius: SnoseySizes.defaultBorderRadius,
+            borderRadius: DinnovaSizes.defaultBorderRadius,
           )),
     );
   }

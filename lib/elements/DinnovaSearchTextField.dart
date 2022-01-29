@@ -3,10 +3,10 @@ import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 
-import '../utils/SnoseyLanguages.dart';
+import '../utils/DinnovaLanguages.dart';
 
-class SnoseySearchTextField extends TypeAheadField {
-  SnoseySearchTextField({
+class DinnovaSearchTextField extends TypeAheadField {
+  DinnovaSearchTextField({
     required TextEditingController controller,
     required VoidCallback onEditingComplete,
     required Function(String) onChanged,
@@ -29,7 +29,7 @@ class SnoseySearchTextField extends TypeAheadField {
                     size: 20,
                   ),
                 ),
-                hintText: SnoseyLanguagesKeys.searchHint.toString().tr,
+                hintText: DinnovaLanguagesKeys.searchHint.toString().tr,
               ),
               controller: controller,
               maxLines: 1,

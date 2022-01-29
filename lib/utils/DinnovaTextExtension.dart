@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-extension SnoseyTextExtension on TextStyle {
+extension DinnovaTextExtension on TextStyle {
   TextStyle underline({Color? color}) {
    return this.copyWith(
       shadows: [

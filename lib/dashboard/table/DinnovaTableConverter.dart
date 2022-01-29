@@ -3,22 +3,22 @@ import 'package:flutter/services.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:pdf/widgets.dart';
 import 'package:printing/printing.dart';
-import 'package:snosey_flutter_package/SnoseyFlutterPackage.dart';
-import 'package:snosey_flutter_package/dashboard/table/SnoseyTable.dart';
+import 'package:dinnova/DinnovaFlutterPackage.dart';
+import 'package:dinnova/dashboard/table/DinnovaTable.dart';
 
-class SnoseyConvertTableModel {
+class DinnovaConvertTableModel {
   final String name;
   final List<String> cells;
 
-  SnoseyConvertTableModel(this.name, this.cells);
+  DinnovaConvertTableModel(this.name, this.cells);
 }
 
-class SnoseyTableConverter {
+class DinnovaTableConverter {
   List<List<String>> dataRowList = [];
   List<String> headerList = [];
 
   mapData(
-      List<SnoseyTableData> customTableMapList, Set<int> printDataList) async {
+      List<DinnovaTableData> customTableMapList, Set<int> printDataList) async {
     var list = customTableMapList.reversed
         .where((element) => element.printTableModel != null);
     if (list.isEmpty) return;
@@ -44,7 +44,7 @@ class SnoseyTableConverter {
     ByteData font;
     Font ttf;
     Document pdf;
-    font = await rootBundle.load(SnoseyFlutterPackage.defaultFontPath);
+    font = await rootBundle.load(DinnovaFlutterPackage.defaultFontPath);
     ttf = Font.ttf(font);
     pdf = pw.Document();
     pdf.addPage(

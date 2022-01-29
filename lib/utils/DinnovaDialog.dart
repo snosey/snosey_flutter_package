@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:snosey_flutter_package/SnoseyWeb.dart';
-import 'package:snosey_flutter_package/utils/SnoseyLanguages.dart';
-import 'package:snosey_flutter_package/utils/SnoseySizes.dart';
+import 'package:dinnova/DinnovaWeb.dart';
+import 'package:dinnova/utils/DinnovaLanguages.dart';
+import 'package:dinnova/utils/DinnovaSizes.dart';
 
-class SnoseyDialog {
+class DinnovaDialog {
   static showAlertDialog(
     BuildContext context, {
     required String content,
@@ -12,7 +12,7 @@ class SnoseyDialog {
     String? buttonTitle,
   }) {
     Widget okButton = TextButton(
-      child: Text(buttonTitle ?? SnoseyLanguagesKeys.ok.toString().tr),
+      child: Text(buttonTitle ?? DinnovaLanguagesKeys.ok.toString().tr),
       onPressed: () {},
     );
 
@@ -47,7 +47,7 @@ class SnoseyDialog {
                     child: Container(
                       color: Colors.white,
                       height: 150,
-                      padding: EdgeInsets.all(SnoseySizes.defaultMargin),
+                      padding: EdgeInsets.all(DinnovaSizes.defaultMargin),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: <Widget>[
@@ -68,14 +68,14 @@ class SnoseyDialog {
                                   onPressed:
                                       onPress ?? () => Navigator.pop(context),
                                   child: Text(
-                                    SnoseyLanguagesKeys.ok.toString().tr,
+                                    DinnovaLanguagesKeys.ok.toString().tr,
                                   ))
                               .marginSymmetric(
-                                  horizontal: SnoseySizes.defaultMargin),
+                                  horizontal: DinnovaSizes.defaultMargin),
                         ],
                       ),
                     ),
-                  ).marginAll(SnoseySizes.defaultMargin),
+                  ).marginAll(DinnovaSizes.defaultMargin),
                 ],
               ),
             ),
@@ -97,7 +97,7 @@ class SnoseyDialog {
                 color: Theme.of(context).colorScheme.surface,
                 height: 150,
                 width: 300,
-                padding: EdgeInsets.all(SnoseySizes.defaultMargin),
+                padding: EdgeInsets.all(DinnovaSizes.defaultMargin),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
@@ -123,10 +123,10 @@ class SnoseyDialog {
                                     yes.call();
                                   },
                                   child: Text(
-                                    SnoseyLanguagesKeys.yes.toString().tr,
+                                    DinnovaLanguagesKeys.yes.toString().tr,
                                   ))
                               .marginSymmetric(
-                                  horizontal: SnoseySizes.defaultMargin / 2),
+                                  horizontal: DinnovaSizes.defaultMargin / 2),
                         ),
                         Expanded(
                           child: TextButton(
@@ -134,17 +134,17 @@ class SnoseyDialog {
                                     no.call();
                                   },
                                   child: Text(
-                                    SnoseyLanguagesKeys.no.toString().tr,
+                                    DinnovaLanguagesKeys.no.toString().tr,
                                   ))
                               .marginSymmetric(
-                                  horizontal: SnoseySizes.defaultMargin / 2),
+                                  horizontal: DinnovaSizes.defaultMargin / 2),
                         ),
                       ],
-                    ).marginSymmetric(horizontal: SnoseySizes.defaultMargin / 2),
+                    ).marginSymmetric(horizontal: DinnovaSizes.defaultMargin / 2),
                   ],
                 ),
               ),
-            ).marginAll(SnoseySizes.defaultMargin),
+            ).marginAll(DinnovaSizes.defaultMargin),
           );
         });
   }

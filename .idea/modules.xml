@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/snosey_flutter_package.iml" filepath="$PROJECT_DIR$/snosey_flutter_package.iml" />
+      <module fileurl="file://$PROJECT_DIR$/dinnova_flutter_package.iml" filepath="$PROJECT_DIR$/dinnova_flutter_package.iml" />
     </modules>
   </component>
 </project>

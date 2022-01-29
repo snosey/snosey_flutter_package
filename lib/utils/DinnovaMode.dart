@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:snosey_flutter_package/utils/SnoseyLanguages.dart';
+import 'package:dinnova/utils/DinnovaLanguages.dart';
 
-import 'StorageManager.dart';
+import 'DinnovaStorageManager.dart';
 
-class SnoseyMode {
-  static changeThemeMode() {
+class DinnovaMode {
+  static changeThemeMode(String key) {
     Get.changeThemeMode(Get.isDarkMode ? ThemeMode.light : ThemeMode.dark);
-    SnoseyStorageManager.saveData("isDarkMode", Get.isDarkMode);
+    DinnovaStorageManager.saveData(key, Get.isDarkMode);
   }
 
   static changeLanguageMode() {
@@ -15,12 +15,12 @@ class SnoseyMode {
     var ar = "ar";
     var en = "en";
     if (Get.locale!.languageCode == ar) {
-      SnoseyStorageManager.saveData(
-          SnoseyLanguagesKeys.language.toString(), en);
+      DinnovaStorageManager.saveData(
+          DinnovaLanguagesKeys.language.toString(), en);
       Get.updateLocale(Locale(en));
     } else if (Get.locale!.languageCode == en) {
-      SnoseyStorageManager.saveData(
-          SnoseyLanguagesKeys.language.toString(), ar);
+      DinnovaStorageManager.saveData(
+          DinnovaLanguagesKeys.language.toString(), ar);
       Get.updateLocale(Locale(ar));
     }
   }

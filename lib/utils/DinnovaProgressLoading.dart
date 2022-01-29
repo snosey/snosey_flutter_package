@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:snosey_flutter_package/utils/SnoseySizes.dart';
+import 'package:dinnova/utils/DinnovaSizes.dart';
 
-import 'SnoseyLanguages.dart';
+import 'DinnovaLanguages.dart';
 
-class SnoseyProgressLoading {
+class DinnovaProgressLoading {
   static Widget showFullDialog(BuildContext context) {
     return Center(
       child: Container(
         height: 50,
         child: Card(
           child: Padding(
-            padding: EdgeInsets.all(SnoseySizes.defaultMargin / 2),
+            padding: EdgeInsets.all(DinnovaSizes.defaultMargin / 2),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -22,8 +22,8 @@ class SnoseyProgressLoading {
                 ),
                 Padding(
                     padding:
-                        EdgeInsets.symmetric(horizontal: SnoseySizes.defaultMargin),
-                    child: Text(SnoseyLanguagesKeys.loadingPleaseWait.toString().tr,
+                        EdgeInsets.symmetric(horizontal: DinnovaSizes.defaultMargin),
+                    child: Text(DinnovaLanguagesKeys.loadingPleaseWait.toString().tr,
                         style: Theme.of(context).textTheme.subtitle1!.copyWith(
                             color: Theme.of(context).colorScheme.primary))),
               ],
@@ -39,7 +39,7 @@ class SnoseyProgressLoading {
     return Center(
       child: CircularProgressIndicator(
         valueColor: new AlwaysStoppedAnimation<Color>(color),
-      ).marginAll(SnoseySizes.defaultMargin),
+      ).marginAll(DinnovaSizes.defaultMargin),
     );
   }
 

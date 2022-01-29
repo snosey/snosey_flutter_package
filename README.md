@@ -1,4 +1,4 @@
-# snosey_flutter_package
+# dinnova
 
 A new Flutter project.
 

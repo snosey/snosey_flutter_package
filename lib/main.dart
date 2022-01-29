@@ -3,10 +3,10 @@ import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:snosey_flutter_package/TestWidget.dart';
+import 'package:dinnova/TestWidget.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
-import 'utils/SnoseyLanguages.dart';
+import 'utils/DinnovaLanguages.dart';
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   timeago.setLocaleMessages('ar', timeago.ArMessages());
@@ -27,7 +27,7 @@ class MainCommon extends StatelessWidget {
         GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
       ],
-      translations: SnoseyLanguages(),
+      translations: DinnovaLanguages(),
       supportedLocales: [Locale("ar"), Locale("en")],
       debugShowCheckedModeBanner: false,
       home: TestWidget(),

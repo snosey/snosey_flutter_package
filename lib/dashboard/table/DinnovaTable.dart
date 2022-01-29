@@ -1,21 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:snosey_flutter_package/SnoseyTheme.dart';
-import 'package:snosey_flutter_package/api/SnoseyApiResponse.dart';
-import 'package:snosey_flutter_package/dashboard/table/SnoseyTableConverter.dart';
-import 'package:snosey_flutter_package/elments/SnoseySearchTextField.dart';
-import 'package:snosey_flutter_package/utils/SnoseyEmptyResult.dart';
-import 'package:snosey_flutter_package/utils/SnoseyProgressLoading.dart';
-import 'package:snosey_flutter_package/utils/SnoseySizes.dart';
+import 'package:dinnova/DinnovaTheme.dart';
+import 'package:dinnova/api/DinnovaApiResponse.dart';
+import 'package:dinnova/dashboard/table/DinnovaTableConverter.dart';
+import 'package:dinnova/elements/DinnovaSearchTextField.dart';
+import 'package:dinnova/utils/DinnovaEmptyResult.dart';
+import 'package:dinnova/utils/DinnovaProgressLoading.dart';
+import 'package:dinnova/utils/DinnovaSizes.dart';
 
-class SnoseyTableData {
+class DinnovaTableData {
   Object? key;
   DataColumn dataColumn;
-  SnoseyConvertTableModel? printTableModel;
+  DinnovaConvertTableModel? printTableModel;
   List<DataCell> dataCells;
   double width;
 
-  SnoseyTableData(
+  DinnovaTableData(
       {required this.dataColumn,
       required this.dataCells,
       this.printTableModel,
@@ -23,22 +23,22 @@ class SnoseyTableData {
       this.width = 150});
 }
 
-class SnoseyTableWidget extends StatefulWidget {
-  final List<SnoseyTableData> customTableMapList;
+class DinnovaTableWidget extends StatefulWidget {
+  final List<DinnovaTableData> customTableMapList;
   final int? sortColumnIndex;
   final bool sortAsc;
   final VoidCallback? onAddNew;
-  final SnoseySearchTextField? searchTextField;
+  final DinnovaSearchTextField? searchTextField;
   final Widget? spinner;
   final VoidCallback? onFilter;
-  final SnoseyPagination pagination;
+  final DinnovaPagination pagination;
   final Function(int) onPageSizeChanged;
   final Function(int) onPageNumberChanged;
   final bool isLoading;
   final String tableTitle;
   final bool showCheckbox;
 
-  SnoseyTableWidget(
+  DinnovaTableWidget(
     this.customTableMapList, {
     required this.sortColumnIndex,
     required this.sortAsc,
@@ -55,10 +55,10 @@ class SnoseyTableWidget extends StatefulWidget {
   });
 
   @override
-  State<StatefulWidget> createState() => _SnoseyTableWidgetState();
+  State<StatefulWidget> createState() => _DinnovaTableWidgetState();
 }
 
-class _SnoseyTableWidgetState extends State<SnoseyTableWidget> {
+class _DinnovaTableWidgetState extends State<DinnovaTableWidget> {
   late int currentPageCountValue;
   var pageSizes = [15, 50, 100];
 
@@ -141,7 +141,7 @@ class _SnoseyTableWidgetState extends State<SnoseyTableWidget> {
     return ConstrainedBox(
       constraints: BoxConstraints(maxWidth: maxWidth),
       child: Card(
-        margin: EdgeInsets.all(SnoseySizes.defaultMargin),
+        margin: EdgeInsets.all(DinnovaSizes.defaultMargin),
         child: Stack(
           children: [
             Column(
@@ -162,8 +162,9 @@ class _SnoseyTableWidgetState extends State<SnoseyTableWidget> {
                                     ? TextButton(
                                         child: Icon(Icons.add),
                                         onPressed: widget.onAddNew,
-                                        style: SnoseyButtonThemes
-                                                .iconButtonCircleTheme(context: context)
+                                        style: DinnovaButtonThemes
+                                                .iconButtonCircleTheme(
+                                                    context: context)
                                             .style,
                                       )
                                     : Container(),
@@ -171,8 +172,9 @@ class _SnoseyTableWidgetState extends State<SnoseyTableWidget> {
                                     ? TextButton(
                                         child: Icon(Icons.filter_list_alt),
                                         onPressed: widget.onFilter,
-                                        style: SnoseyButtonThemes
-                                                .iconButtonCircleTheme(context: context)
+                                        style: DinnovaButtonThemes
+                                                .iconButtonCircleTheme(
+                                                    context: context)
                                             .style,
                                       )
                                     : Container(),
@@ -181,11 +183,11 @@ class _SnoseyTableWidgetState extends State<SnoseyTableWidget> {
                                         child: widget.searchTextField!
                                             .marginSymmetric(
                                                 horizontal:
-                                                    SnoseySizes.defaultMargin),
+                                                    DinnovaSizes.defaultMargin),
                                       )
                                     : Container(),
                               ],
-                            ).marginAll(SnoseySizes.defaultMargin),
+                            ).marginAll(DinnovaSizes.defaultMargin),
                           ),
                           widget.spinner != null
                               ? SizedBox(
@@ -203,7 +205,7 @@ class _SnoseyTableWidgetState extends State<SnoseyTableWidget> {
                           children: [
                             IconButton(
                                 onPressed: () async {
-                                  var pdfPrinter = SnoseyTableConverter();
+                                  var pdfPrinter = DinnovaTableConverter();
                                   pdfPrinter.mapData(
                                     widget.customTableMapList,
                                     printDataList,
@@ -216,7 +218,7 @@ class _SnoseyTableWidgetState extends State<SnoseyTableWidget> {
                                 )),
                             IconButton(
                                 onPressed: () {
-                                  var tableConverter = SnoseyTableConverter();
+                                  var tableConverter = DinnovaTableConverter();
                                   tableConverter.mapData(
                                     widget.customTableMapList,
                                     printDataList,
@@ -276,7 +278,10 @@ class _SnoseyTableWidgetState extends State<SnoseyTableWidget> {
                                       !widget.showCheckbox
                                           ? Container()
                                           : Container(
-                                              width: 39,
+                                              width: 30,
+                                              margin:
+                                                  EdgeInsetsDirectional.only(
+                                                      start: 4),
                                               child: Center(
                                                 child: Checkbox(
                                                     checkColor:
@@ -375,8 +380,8 @@ class _SnoseyTableWidgetState extends State<SnoseyTableWidget> {
                               "رقم الصفحة",
                               style: Theme.of(context).textTheme.subtitle1,
                             ).marginSymmetric(
-                                horizontal: SnoseySizes.defaultMargin,
-                                vertical: SnoseySizes.defaultMargin / 2)
+                                horizontal: DinnovaSizes.defaultMargin,
+                                vertical: DinnovaSizes.defaultMargin / 2)
                           ],
                         ),
                       ),
@@ -405,7 +410,7 @@ class _SnoseyTableWidgetState extends State<SnoseyTableWidget> {
                                   });
                                 },
                               ).marginSymmetric(
-                                  horizontal: SnoseySizes.defaultMargin),
+                                  horizontal: DinnovaSizes.defaultMargin),
                               Text(
                                 "عنصر في الصفحه الواحدة",
                               ),
@@ -416,16 +421,16 @@ class _SnoseyTableWidgetState extends State<SnoseyTableWidget> {
                             style: Theme.of(context).textTheme.subtitle1,
                           ),
                         ],
-                      ).marginAll(SnoseySizes.defaultMargin),
+                      ).marginAll(DinnovaSizes.defaultMargin),
                     ],
                   ),
                 ),
               ],
             ),
             widget.isLoading
-                ? Center(child: SnoseyProgressLoading.showIndicator(context))
+                ? Center(child: DinnovaProgressLoading.showIndicator(context))
                 : dataRows.isEmpty
-                    ? SnoseyEmptyResult()
+                    ? DinnovaEmptyResult()
                     : Container()
           ],
         ),
@@ -493,7 +498,8 @@ class _SnoseyTableWidgetState extends State<SnoseyTableWidget> {
       return Center(
         child: TextButton(
             onPressed: () {},
-            style: SnoseyButtonThemes.iconButtonCircleTheme(context: context).style,
+            style: DinnovaButtonThemes.iconButtonCircleTheme(context: context)
+                .style,
             child: Text(textValue)),
       );
     } else {
@@ -506,7 +512,7 @@ class _SnoseyTableWidgetState extends State<SnoseyTableWidget> {
                     widget.onPageNumberChanged(int.parse(textValue));
                 },
           child: Text(textValue),
-        ).marginSymmetric(horizontal: SnoseySizes.defaultMargin / 2),
+        ).marginSymmetric(horizontal: DinnovaSizes.defaultMargin / 2),
       );
     }
   }

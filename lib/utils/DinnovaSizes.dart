@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class SnoseySizes {
+class DinnovaSizes {
   static final double textFieldWidth = 200;
   static final double defaultMargin = 10.0;
   static final double
@@ -8,6 +8,6 @@ class SnoseySizes {
   static final double circleRadius = 50.0;
   static final double rectRadius = 10.0;
   static final defaultBorderRadius =
-      BorderRadius.circular(SnoseySizes.circleRadius);
-  static final recBorderRadius = BorderRadius.circular(SnoseySizes.rectRadius);
+      BorderRadius.circular(DinnovaSizes.circleRadius);
+  static final recBorderRadius = BorderRadius.circular(DinnovaSizes.rectRadius);
 }

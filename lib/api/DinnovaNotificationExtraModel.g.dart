@@ -1,14 +1,14 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'SnoseyNotificationExtraModel.dart';
+part of 'DinnovaNotificationExtraModel.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-SnoseyNotificationExtraModel _$SnoseyNotificationExtraModelFromJson(
+DinnovaNotificationExtraModel _$DinnovaNotificationExtraModelFromJson(
         Map<String, dynamic> json) =>
-    SnoseyNotificationExtraModel()
+    DinnovaNotificationExtraModel()
       ..Fk_NotificationOpenType = json['Fk_NotificationOpenType'] as int
       ..Fk_NotificationType = json['Fk_NotificationType'] as int
       ..NotificationId = json['NotificationId'] as int
@@ -16,8 +16,8 @@ SnoseyNotificationExtraModel _$SnoseyNotificationExtraModelFromJson(
       ..ImgUrl = json['ImgUrl'] as String
       ..LogoUrl = json['LogoUrl'] as String;
 
-Map<String, dynamic> _$SnoseyNotificationExtraModelToJson(
-        SnoseyNotificationExtraModel instance) =>
+Map<String, dynamic> _$DinnovaNotificationExtraModelToJson(
+        DinnovaNotificationExtraModel instance) =>
     <String, dynamic>{
       'Fk_NotificationOpenType': instance.Fk_NotificationOpenType,
       'Fk_NotificationType': instance.Fk_NotificationType,

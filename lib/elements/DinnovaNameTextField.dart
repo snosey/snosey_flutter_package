@@ -1,11 +1,10 @@
-import '../utils/SnoseyLanguages.dart';import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import '../utils/DinnovaLanguages.dart';import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import 'CommonTextField.dart';
 
-class SnoseyPhoneTextField extends CommonTextField {
-  SnoseyPhoneTextField({
+class DinnovaNameTextField extends CommonTextField {
+  DinnovaNameTextField({
     TextEditingController? controller,
     bool? enabled,
     bool readOnly = false,
@@ -13,29 +12,25 @@ class SnoseyPhoneTextField extends CommonTextField {
     String? initialValue,
     ValueChanged<String>? onChanged,
     VoidCallback? onEditingComplete,
-    bool? showErrorAlways,
     Widget? startIconWidget,
     Widget? endIconWidget,
     String? labelText,
     String? errorText,
+    bool? showErrorAlways,
     TextAlign textAlign = TextAlign.start,
   }) : super(
-          labelText: labelText ?? SnoseyLanguagesKeys.phoneNumber.toString().tr,
+          labelText: labelText??DinnovaLanguagesKeys.name.toString().tr,
           controller: controller,
     onEditingComplete: onEditingComplete,
     onChanged: onChanged,
+          enabled: enabled,
     endIconWidget: endIconWidget,
     startIconWidget: startIconWidget,
-          enabled: enabled,
-    showErrorAlways: showErrorAlways??true,
-          keyboardType: TextInputType.phone,
-          inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+          showErrorAlways: showErrorAlways??true,
+          keyboardType: TextInputType.name,
           validator: (text) {
-            if (isRequired &&
-                (text == null ||
-                    !GetUtils.isPhoneNumber(text) ||
-                    (text.length != 10 && text.length != 11)))
-              return errorText??SnoseyLanguagesKeys.phoneHintError.toString().tr;
+            if (isRequired && (text == null || text.isEmpty))
+              return errorText??DinnovaLanguagesKeys.thisFieldRequired.toString().tr;
             else
               return null;
           },

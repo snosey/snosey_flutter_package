@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../utils/SnoseyLanguages.dart';
+import '../utils/DinnovaLanguages.dart';
 import 'CommonTextField.dart';
 
-class SnoseyPasswordTextField extends CommonTextField {
-  SnoseyPasswordTextField({
+class DinnovaPasswordTextField extends CommonTextField {
+  DinnovaPasswordTextField({
     required bool isPasswordVisible,
     required VoidCallback onChangeVisibleClick,
     TextEditingController? controller,
@@ -22,7 +22,7 @@ class SnoseyPasswordTextField extends CommonTextField {
     VoidCallback? onEditingComplete,
     TextAlign textAlign = TextAlign.start,
   }) : super(
-          labelText: labelText ?? SnoseyLanguagesKeys.password.toString().tr,
+          labelText: labelText ?? DinnovaLanguagesKeys.password.toString().tr,
           controller: controller,
           enabled: enabled,
           onEditingComplete: onEditingComplete,
@@ -40,7 +40,7 @@ class SnoseyPasswordTextField extends CommonTextField {
           validator: (text) {
             if (isRequired && (text == null || text.length < 6))
               return errorText ??
-                  SnoseyLanguagesKeys.passwordHintError.toString().tr;
+                  DinnovaLanguagesKeys.passwordHintError.toString().tr;
             else
               return null;
           },

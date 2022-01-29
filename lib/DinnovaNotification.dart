@@ -6,9 +6,9 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:snosey_flutter_package/api/SnoseyNotificationExtraModel.dart';
+import 'package:dinnova/api/DinnovaNotificationExtraModel.dart';
 
-class SnoseyNotification {
+class DinnovaNotification {
   static late String _defaultLogo;
 
   static late String _defaultSound;
@@ -23,7 +23,7 @@ class SnoseyNotification {
       (notificationPayload) async {
     if (notificationPayload == null) return;
     var notificationPayLoadModel =
-        SnoseyNotificationExtraModel.fromJson(jsonDecode(notificationPayload));
+        DinnovaNotificationExtraModel.fromJson(jsonDecode(notificationPayload));
     _handleOpenNotification(
       fkNotification: notificationPayLoadModel.NotificationId,
       fkNotificationOpenType: notificationPayLoadModel.Fk_NotificationOpenType,
@@ -45,7 +45,7 @@ class SnoseyNotification {
       payload = message.data['Extra'];
     }
 
-    final extra = SnoseyNotificationExtraModel.fromJson(json.decode(payload!));
+    final extra = DinnovaNotificationExtraModel.fromJson(json.decode(payload!));
 
     NotificationGroup notificationGroup = _notificationGroups.firstWhere(
         (element) => element.id == extra.Fk_NotificationType.toString());
@@ -76,7 +76,7 @@ class SnoseyNotification {
                   ),
             playSound: true,
             sound: RawResourceAndroidNotificationSound(
-                SnoseyNotification._defaultSound),
+                DinnovaNotification._defaultSound),
             showWhen: true);
 
     IOSNotificationDetails iosNotificationDetails = IOSNotificationDetails(
@@ -145,10 +145,10 @@ class SnoseyNotification {
               required dynamic isFCM,
               required String target})
           handleOpenNotification}) async {
-    SnoseyNotification._handleOpenNotification = handleOpenNotification;
-    SnoseyNotification._notificationGroups = notificationGroups;
-    SnoseyNotification._defaultLogo = defaultLogo;
-    SnoseyNotification._defaultSound = defaultSound;
+    DinnovaNotification._handleOpenNotification = handleOpenNotification;
+    DinnovaNotification._notificationGroups = notificationGroups;
+    DinnovaNotification._defaultLogo = defaultLogo;
+    DinnovaNotification._defaultSound = defaultSound;
     // initialise the plugin. app_icon needs to be a added as a drawable resource to the Android head projectAndroidInitializationSettings initializationSettingsAndroid =
     AndroidInitializationSettings initializationSettingsAndroid =
         AndroidInitializationSettings(_defaultLogo);
@@ -164,7 +164,7 @@ class SnoseyNotification {
         onSelectNotification: _onNotificationClick);
 
     FirebaseMessaging.onBackgroundMessage(
-        SnoseyNotification._firebaseMessagingBackgroundHandler);
+        DinnovaNotification._firebaseMessagingBackgroundHandler);
 
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
       //Foreground message in ios send auto ... android need to show manual
@@ -183,7 +183,7 @@ class SnoseyNotification {
 
     if (notificationAppLaunchDetails != null &&
         notificationAppLaunchDetails.didNotificationLaunchApp) {
-      SnoseyNotification._onNotificationClick(
+      DinnovaNotification._onNotificationClick(
           notificationAppLaunchDetails.payload);
     }
   }
@@ -219,7 +219,7 @@ class SnoseyNotification {
   }
 
   static void onTapRemoteMessage(RemoteMessage message) {
-    final extra = SnoseyNotificationExtraModel.fromJson(
+    final extra = DinnovaNotificationExtraModel.fromJson(
         json.decode(message.data['Extra']!));
     _handleOpenNotification(
       fkNotification: extra.NotificationId,

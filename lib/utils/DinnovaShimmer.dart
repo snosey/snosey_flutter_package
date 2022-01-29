@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
 
-class SnoseyShimmer {
+class DinnovaShimmer {
   static Widget get({required Widget child, required BuildContext context}) {
     return Shimmer.fromColors(
       baseColor: Theme.of(context).colorScheme.onBackground.withOpacity(.05),
